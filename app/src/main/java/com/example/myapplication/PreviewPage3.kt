@@ -39,6 +39,7 @@ import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
@@ -53,26 +54,15 @@ import androidx.compose.ui.semantics.Role.Companion.Button
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-
 @Composable
 fun PreviewPage3() {
     var painter = painterResource(id = R.drawable.appdev3)
-    var buttonValue by remember { mutableStateOf(0) }
+
 
 //    @Composable
 //    fun GridLogic(it: Int) {
 //        if (Grid[it] == 1) {
-//            if (ValColor.value == 0) {
-//                Text(
-//                    "3",
-//                    color = Color.Red
-//                )
-//            } else {
-//                Text(
-//                    "3",
-//                    color = Color.Blue
-//                )
-//            }
+//            if (GridVal[it] == 4)
 //        }
 //    }
     if (PageColor.value == 1) {
@@ -124,6 +114,31 @@ fun PreviewPage3() {
                             PageColor.value = if (PageColor.value == 0) 1 else 0
                             ValColor.value = if (PageColor.value == 0) 0 else 1
                             Grid2[index] = if (ValColor.value == 0) 0 else 1
+                            if (ValColor.value == 0) {
+                                P1Cnt.value += 1
+
+                            } else {
+
+                                P2Cnt.value += 1
+                            }
+                            if(ValColor.value==0){
+                                if(P1Cnt.value==0){
+                                    GridVal[index]=3
+                                }
+                                else{
+                                    GridVal[index]=1
+                                }
+                            }
+                            else{
+                                if(P2Cnt.value==0){
+                                    GridVal[index]=3
+                                }
+                                else{
+                                    GridVal[index]=1
+                                }
+                            }
+
+
                         },
                         modifier = Modifier.shadow(
                             elevation = 86.dp,
@@ -137,13 +152,40 @@ fun PreviewPage3() {
                                 255
                             )
                         )
-                    ) {if(Grid[index]==1)
-                        Text("1",
-                            color=Color.Red)
+                    ) {
+                        if (Grid[index] == 1) {
+                            if(Grid2[index]==1){
+                                if(P1Cnt.value==0){
+                                    Text(
+                                        GridVal[index].toString(),
+                                        color = Color(255, 94, 86, 255))
+
+                                }
+                                else if(P1Cnt.value>1){
+                                    Text(
+                                        GridVal[index].toString(),
+                                                color = Color(255, 94, 86, 255)
+                                    )
+
+                                }
+                            }
+                            else{
+                                if(P2Cnt.value==0){
+                                    Text(
+                                        GridVal[index].toString(),
+                                        color =  Color(47, 183, 241, 255)
+                                    )
+
+                                }
+                                else if(P2Cnt.value>1){
+                                    Text(Grid2[index].toString(),
+                                        color = Color(47, 183, 241, 255))
+                                }
+                            }
+
+                        }
                     }
                 }
-            }
-        }
 
 
 //        LazyVerticalGrid(columns = GridCells.Fixed(5),content={
@@ -183,9 +225,10 @@ fun PreviewPage3() {
 //
 //
 //        })
+            }
+        }
     }
 }
-
 
 
 

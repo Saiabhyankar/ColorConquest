@@ -33,6 +33,9 @@ var PlayerTurn= mutableIntStateOf(0)
 var PlayerIndTurn = mutableStateListOf(0,0)
 var player1Name=mutableStateOf("")
 var player2Name=mutableStateOf("")
+var GridVal=mutableStateListOf(0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0)
+var P1Cnt= mutableIntStateOf(-1)
+var P2Cnt= mutableIntStateOf(-1)
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
