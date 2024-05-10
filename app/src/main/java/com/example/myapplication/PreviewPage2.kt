@@ -46,6 +46,7 @@ fun PreviewPage2(){
     var painter1= painterResource(id = R.drawable.appdev2)
     var painter2= painterResource(id = R.drawable.image1)
     var painter3= painterResource(id = R.drawable.appdev4)
+    var painter4=painterResource(id=R.drawable.appdev5)
     Column(
         horizontalAlignment = Alignment.CenterHorizontally
     ){Row(){
@@ -76,25 +77,67 @@ fun PreviewPage2(){
                 modifier= Modifier
                     .offset(-10.dp, 200.dp)
                     .size(250.dp))
-            Card(
-                shape= RoundedCornerShape(20.dp),
-                colors = CardDefaults.cardColors(containerColor = Color(61,65,117,255)),
-                modifier= Modifier
-                    .size(height = 100.dp, width = 300.dp)
-                    .offset(-20.dp, 215.dp)
-            ){
-                Image(painter = painter3, contentDescription = "Text",
+            Column(){
+                Card(
+                    shape= RoundedCornerShape(20.dp),
+                    colors = CardDefaults.cardColors(containerColor = Color(61,65,117,255)),
                     modifier= Modifier
-                        .size(150.dp)
-                        .offset(0.dp, 0.dp),
-                    alignment = Alignment.TopCenter
+                        .size(height = 100.dp, width = 300.dp)
+                        .offset(-20.dp, 215.dp)
+                ){
+                    Image(painter = painter3, contentDescription = "Text",
+                        modifier= Modifier
+                            .size(150.dp)
+                            .offset(0.dp, 0.dp),
+                        alignment = Alignment.TopCenter
                     )
-                TextField(value = "Please Enter Name", onValueChange ={player1Name.value=it},
-                   colors = TextFieldDefaults.colors(Color(61,65,117,255)))
-
+                    TextField(value = "Please Enter Name", onValueChange ={player2Name.value=it},
+                        colors = TextFieldDefaults.textFieldColors(containerColor = Color(61,65,117,255)),)
+                    Text(text = "_ _ _ _ _ _",
+                        color=Color(254,95,86,255))
 
                 }
+
+                Card(
+                    shape= RoundedCornerShape(20.dp),
+                    colors = CardDefaults.cardColors(containerColor = Color(61,65,117,255)),
+                    modifier= Modifier
+                        .size(height = 90.dp, width = 300.dp)
+                        .offset(-20.dp, 245.dp)
+                ){
+                    Image(painter = painter3, contentDescription = "Text",
+                        modifier= Modifier
+                            .size(150.dp)
+                            .offset(0.dp, 0.dp),
+                        alignment = Alignment.TopCenter
+                    )
+                    TextField(value = "Please Enter Name", onValueChange ={player2Name.value=it},
+                        colors = TextFieldDefaults.textFieldColors(containerColor = Color(61,65,117,255)),)
+                    Text("_ _ _ _ _ _ _",
+                        color=Color(254,95,86,255),
+                        modifier=Modifier.offset(0.dp,10.dp))
+                }
             }
+
+
+//            Card(
+//                shape= RoundedCornerShape(20.dp),
+//                colors = CardDefaults.cardColors(containerColor = Color(61,65,117,255)),
+//                modifier= Modifier
+//                    .size(height = 100.dp, width = 300.dp)
+//                    .offset(-10.dp, 255.dp)
+//            ){
+//                Image(painter = painter4, contentDescription = "Text",
+//                    modifier= Modifier
+//                        .size(150.dp)
+//                        .offset(0.dp, 0.dp),
+//                    alignment = Alignment.TopCenter
+//                )
+//                TextField(value = "Please Enter Name", onValueChange ={player1Name.value=it},
+//                    colors = TextFieldDefaults.textFieldColors(containerColor = Color(61,65,117,255)),)
+//            }
+            }
+
 
 
 
