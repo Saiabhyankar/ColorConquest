@@ -58,7 +58,6 @@ import androidx.compose.ui.unit.sp
 fun PreviewPage3() {
     var painter = painterResource(id = R.drawable.appdev3)
 
-
 //    @Composable
 //    fun GridLogic(it: Int) {
 //        if (Grid[it] == 1) {
@@ -112,8 +111,17 @@ fun PreviewPage3() {
                         onClick = {
                             Grid[index] = 1
                             PageColor.value = if (PageColor.value == 0) 1 else 0
-                            ValColor.value = if (PageColor.value == 0) 0 else 1
+                            ValColor.value = if (PageColor.value == 0) 1 else 0
                             Grid2[index] = if (ValColor.value == 0) 0 else 1
+                            fun init(){
+                                if(Grid3[index] != Grid2[index]){
+                                    Grid3[index]=Grid2[index]
+                                    return init()
+                                }
+                                else
+                                    return
+                            }
+
                             if (ValColor.value == 0) {
                                 P1Cnt.value += 1
 
@@ -153,34 +161,18 @@ fun PreviewPage3() {
                             )
                         )
                     ) {
+
                         if (Grid[index] == 1) {
-                            if(Grid2[index]==1){
-                                if(P1Cnt.value==0){
+                            if(Grid2[index]==0 && Grid3[index]==0 ){
                                     Text(
                                         GridVal[index].toString(),
                                         color = Color(255, 94, 86, 255))
 
-                                }
-                                else if(P1Cnt.value>1){
-                                    Text(
-                                        GridVal[index].toString(),
-                                                color = Color(255, 94, 86, 255)
-                                    )
-
-                                }
                             }
                             else{
-                                if(P2Cnt.value==0){
-                                    Text(
-                                        GridVal[index].toString(),
-                                        color =  Color(47, 183, 241, 255)
-                                    )
-
-                                }
-                                else if(P2Cnt.value>1){
-                                    Text(Grid2[index].toString(),
+                                Text(GridVal[index].toString(),
                                         color = Color(47, 183, 241, 255))
-                                }
+
                             }
 
                         }
