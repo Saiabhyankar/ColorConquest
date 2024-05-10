@@ -59,22 +59,22 @@ fun PreviewPage3() {
     var painter = painterResource(id = R.drawable.appdev3)
     var buttonValue by remember { mutableStateOf(0) }
 
-    @Composable
-    fun GridLogic(it: Int) {
-        if (Grid[it] == 1) {
-            if (ValColor.value == 0) {
-                Text(
-                    "3",
-                    color = Color.Red
-                )
-            } else {
-                Text(
-                    "3",
-                    color = Color.Blue
-                )
-            }
-        }
-    }
+//    @Composable
+//    fun GridLogic(it: Int) {
+//        if (Grid[it] == 1) {
+//            if (ValColor.value == 0) {
+//                Text(
+//                    "3",
+//                    color = Color.Red
+//                )
+//            } else {
+//                Text(
+//                    "3",
+//                    color = Color.Blue
+//                )
+//            }
+//        }
+//    }
     if (PageColor.value == 1) {
         Surface(
             color = Color(47, 183, 241, 255),
@@ -109,7 +109,7 @@ fun PreviewPage3() {
 
     ) {
         LazyVerticalGrid(columns = GridCells.Fixed(5)) {
-            items(35) { index ->
+            items(25) { index ->
                 Box(
                     modifier = Modifier
                         .padding(4.dp)
@@ -137,8 +137,9 @@ fun PreviewPage3() {
                                 255
                             )
                         )
-                    ) {
-                         GridLogic(it = index)
+                    ) {if(Grid[index]==1)
+                        Text("1",
+                            color=Color.Red)
                     }
                 }
             }
