@@ -121,7 +121,7 @@ fun PreviewPage3() {
                                 else
                                     return
                             }
-
+                            init()
                             if (ValColor.value == 0) {
                                 P1Cnt.value += 1
 
@@ -148,6 +148,7 @@ fun PreviewPage3() {
 
 
                         },
+
                         modifier = Modifier.shadow(
                             elevation = 86.dp,
                             shape = RoundedCornerShape(16.dp)
@@ -163,7 +164,7 @@ fun PreviewPage3() {
                     ) {
 
                         if (Grid[index] == 1) {
-                            if(Grid2[index]==0 && Grid3[index]==0 ){
+                            if(Grid3[index]==0){
                                     Text(
                                         GridVal[index].toString(),
                                         color = Color(255, 94, 86, 255))
@@ -180,43 +181,7 @@ fun PreviewPage3() {
                 }
 
 
-//        LazyVerticalGrid(columns = GridCells.Fixed(5),content={
-//            items(25){
-//                Box(modifier = Modifier
-//                    .padding(4.dp)
-//                    .aspectRatio(1f)
-//                    .clip(RoundedCornerShape(16.dp))
-//                    .background((Color(244, 228, 206, 255)))
-//                    ,
-//                    contentAlignment = Alignment.Center
-//                ){
-//
-//                    Button(onClick = {Grid[it]=1
-//                        PageColor.value=if(PageColor.value==0) 1 else 0
-//                        ValColor.value=if(PageColor.value==0) 1 else 0
-//                        PlayerTurn.value=if(PageColor.value==0) 1 else 0
-//                        Grid2[it]=if(PageColor.value==0) 1 else 0
-//
-//
-//                    },
-//                        modifier=Modifier.shadow(elevation = 86.dp, shape = RoundedCornerShape(16.dp)),
-//                        colors = ButtonDefaults.buttonColors(containerColor = Color(244, 228, 206, 255)),
-//
-//                        ){
-//                        if(Grid[it]==1)
-//                        Text(it.toString(),
-//                            color=Color.Blue
-//                        )
-//
-//                    }
-//
-//
-//
-//                }
-//            }
-//
-//
-//        })
+
             }
         }
     }
