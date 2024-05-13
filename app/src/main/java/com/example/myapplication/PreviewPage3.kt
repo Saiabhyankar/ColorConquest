@@ -113,15 +113,10 @@ fun PreviewPage3() {
                             PageColor.value = if (PageColor.value == 0) 1 else 0
                             ValColor.value = if (PageColor.value == 0) 1 else 0
                             Grid2[index] = if (ValColor.value == 0) 0 else 1
-                            fun init(){
-                                if(Grid3[index] != Grid2[index]){
+
+                            if(Grid3[index]==-1 ){
                                     Grid3[index]=Grid2[index]
-                                    return init()
                                 }
-                                else
-                                    return
-                            }
-                            init()
                             if (ValColor.value == 0) {
                                 P1Cnt.value += 1
 
@@ -162,19 +157,24 @@ fun PreviewPage3() {
                             )
                         )
                     ) {
-
-                        if (Grid[index] == 1) {
-                            if(Grid3[index]==0){
+                        if(Grid3[index]==0 && ButtonState[index]==-1)
+                            ButtonState[index]=0
+                        else if(Grid3[index]==0 && ButtonState[index]==-1)
+                            ButtonState[index]=1
+                        if (Grid[index] == 1 && Grid3[index]!=-1) {
+                            if(ButtonState[index]==0){
+                                if(Grid3[index]==0 && Grid2[index]==0){
                                     Text(
                                         GridVal[index].toString(),
-                                        color = Color(255, 94, 86, 255))
+                                        color = Color(255, 94, 86, 255))}
 
                             }
-                            else{
+                            else if (Grid3[index]==1 && Grid2[index]==1){
                                 Text(GridVal[index].toString(),
                                         color = Color(47, 183, 241, 255))
 
                             }
+
 
                         }
                     }
