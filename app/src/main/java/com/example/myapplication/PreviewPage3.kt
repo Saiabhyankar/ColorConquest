@@ -48,6 +48,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.Color.Companion.White
 import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.semantics.Role.Companion.Button
@@ -58,12 +59,64 @@ import androidx.compose.ui.unit.sp
 fun PreviewPage3() {
     var painter = painterResource(id = R.drawable.appdev3)
 
-//    @Composable
-//    fun GridLogic(it: Int) {
-//        if (Grid[it] == 1) {
-//            if (GridVal[it] == 4)
-//        }
-//    }
+    fun Grid(index :Int){
+        if((GridVal[index]>3 && P1Cnt.value>0)) {
+            if (listOf(0, 4, 24, 20).contains(index)) {
+                if (GridVal[index] > 3 && P1Cnt.value > 0) {
+                    GridVal[index] = 0
+
+                    if (index == 0) {
+                        GridVal[index + 1] += 1
+
+                        GridVal[index + 5] += 1
+                    } else if (index == 4) {
+                        GridVal[index - 1] += 1
+
+                        GridVal[index + 5] += 1
+                    } else if (index == 20) {
+                        GridVal[index + 1] += 1
+
+                        GridVal[index - 5] += 1
+                    } else {
+                        GridVal[index - 1] += 1
+
+                        GridVal[index - 5] += 1
+                    }
+
+                }
+
+            } else if (listOf(1, 2, 3, 5, 10, 15, 21, 22, 23, 9, 14, 19).contains(index)) {
+                if (listOf(1, 2, 3).contains(index)) {
+                    GridVal[index] = 0
+                    GridVal[index + 1] += 1
+                    GridVal[index - 1] += 1
+                    GridVal[index + 5] + 1
+                } else if (listOf(5, 10, 15).contains(index)) {
+                    GridVal[index] = 0
+                    GridVal[index + 1] += 1
+                    GridVal[index - 5] += 1
+                    GridVal[index + 5] += 1
+                } else if (listOf(21, 22, 23).contains(index)) {
+                    GridVal[index] = 0
+                    GridVal[index - 1] += 1
+                    GridVal[index - 5] += 1
+                    GridVal[index + 1] + 1
+                } else {
+                    GridVal[index] = 0
+                    GridVal[index - 1] += 1
+                    GridVal[index - 5] += 1
+                    GridVal[index + 5] + 1
+                }
+            } else {
+                GridVal[index] = 0
+                GridVal[index + 5] += 1
+                GridVal[index + 1] += 1
+                GridVal[index - 5] += 1
+                GridVal[index - 1] += 1
+            }
+        }
+
+    }
     if (PageColor.value == 1) {
         Surface(
             color = Color(47, 183, 241, 255),
@@ -95,97 +148,71 @@ fun PreviewPage3() {
             .fillMaxSize()
             .padding(64.dp) // Add padding for better visibility
             .height(200.dp)
+            //.border(width = 2.dp, color = Color.Black)
 
     ) {
         LazyVerticalGrid(columns = GridCells.Fixed(5)) {
             items(25) { index ->
-                Box(
+                Button(
+                    onClick = {
+                        PageColor.value = if (PageColor.value == 0) 1 else 0
+                        Grid[index] = 1
+                        ValColor[index] = if (PageColor.value == 0) 1 else 0
+                        Grid2[index] = if (ValColor[index] == 0) 0 else 1
+
+                        if (Grid3[index] == -1) {
+                            Grid3[index] = Grid2[index]
+                        }
+                        if (ValColor[index] == 0) {
+                            P1Cnt.value += 1
+
+                        } else {
+
+                            P2Cnt.value += 1
+                        }
+                        if (ValColor[index] == 0) {
+                            if (P1Cnt.value == 0) {
+                                GridVal[index] = 3
+                            } else  {
+                                GridVal[index] +=1
+                            }
+                        } else {
+                            if (P2Cnt.value == 0) {
+                                GridVal[index] = 3
+                            } else {
+                                GridVal[index] += 1
+                            }
+                        }
+                    },
                     modifier = Modifier
-                        .padding(4.dp)
+                        .padding(2.dp)
                         .aspectRatio(1f)
                         .clip(RoundedCornerShape(16.dp))
-                        .background(Color(244, 228, 206, 255)),
-                    contentAlignment = Alignment.Center
+                        .shadow(elevation = 16.dp),
+                    colors = ButtonDefaults.buttonColors(containerColor = Color(244, 228, 206, 255))
+
                 ) {
-                    Button(
-                        onClick = {
-                            Grid[index] = 1
-                            PageColor.value = if (PageColor.value == 0) 1 else 0
-                            ValColor.value = if (PageColor.value == 0) 1 else 0
-                            Grid2[index] = if (ValColor.value == 0) 0 else 1
-
-                            if(Grid3[index]==-1 ){
-                                    Grid3[index]=Grid2[index]
-                                }
-                            if (ValColor.value == 0) {
-                                P1Cnt.value += 1
-
-                            } else {
-
-                                P2Cnt.value += 1
-                            }
-                            if(ValColor.value==0){
-                                if(P1Cnt.value==0){
-                                    GridVal[index]=3
-                                }
-                                else{
-                                    GridVal[index]=1
-                                }
-                            }
-                            else{
-                                if(P2Cnt.value==0){
-                                    GridVal[index]=3
-                                }
-                                else{
-                                    GridVal[index]=1
-                                }
-                            }
+//                    if (Grid3[index] == 0 && ButtonState[index] == -1)
+//                        ButtonState[index] = 0
+//                    else if (Grid3[index] == 1 && ButtonState[index] == -1)
+//                        ButtonState[index] = 1
+                    //if(Grid3[index]==0){
+                    Text(GridVal[index].toString(),
+                        color=Color(255, 94, 86, 255))}
+//else{
+//                        Text(GridVal[index].toString(),
+//                            color=Color(47, 183, 241, 255))
+//                    //}
+                        Grid(index)
 
 
-                        },
 
-                        modifier = Modifier.shadow(
-                            elevation = 86.dp,
-                            shape = RoundedCornerShape(16.dp)
-                        ),
-                        colors = ButtonDefaults.buttonColors(
-                            containerColor = Color(
-                                244,
-                                228,
-                                206,
-                                255
-                            )
-                        )
-                    ) {
-                        if(Grid3[index]==0 && ButtonState[index]==-1)
-                            ButtonState[index]=0
-                        else if(Grid3[index]==0 && ButtonState[index]==-1)
-                            ButtonState[index]=1
-                        if (Grid[index] == 1 && Grid3[index]!=-1) {
-                            if(ButtonState[index]==0){
-                                if(Grid3[index]==0 && Grid2[index]==0){
-                                    Text(
-                                        GridVal[index].toString(),
-                                        color = Color(255, 94, 86, 255))}
-
-                            }
-                            else if (Grid3[index]==1 && Grid2[index]==1){
-                                Text(GridVal[index].toString(),
-                                        color = Color(47, 183, 241, 255))
-
-                            }
-
-
-                        }
-                    }
                 }
-
-
-
             }
         }
     }
-}
+
+
 
 
 

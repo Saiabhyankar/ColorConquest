@@ -5,6 +5,7 @@ import android.graphics.Paint
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -187,15 +188,16 @@ fun PreviewPage2() {
                     Image(
                         painter = painter2, contentDescription = "Image",
                         modifier = Modifier
-                            .size(0.dp)
-                            .offset(-130.dp, 50.dp)
+//                            .size(height=200.dp,width=650.dp)
+                            .offset(-125.dp, 150.dp)
+                            .border(width = 10.dp,color=Color.Black)
                     )
                     Button(
                         onClick = { pageState.value = 2 },
                         colors = ButtonDefaults.buttonColors(containerColor = Color(46, 182, 241, 255)),
                         modifier = Modifier
-                            .size(width = 100.dp, height = 200.dp)
-                            .offset(-130.dp, -100.dp)
+                            .size(width = 200.dp, height = 80.dp)
+                            .offset(-130.dp, 200.dp)
                             .shadow(25.dp, RoundedCornerShape(5.dp))
 
                     ) {
