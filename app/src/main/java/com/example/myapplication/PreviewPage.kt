@@ -110,24 +110,24 @@ fun PreviewPage(){
                     colors = ButtonDefaults.buttonColors(containerColor = Color(46,182,241,255)),
                     modifier = Modifier
                         .size(width = 200.dp, height = 80.dp)
-                        .offset(35.dp, 1.dp)
+                        .offset(35.dp, -60.dp)
                         .shadow(25.dp, RoundedCornerShape(5.dp))) {
                     Text("PLAY",
                         fontSize = 32.sp,
                         textAlign = TextAlign.Center)
             }
-                Spacer(Modifier.width(25.dp))
+                Spacer(Modifier.width(5.dp))
                 Button(onClick = { showDialog=true },
                     modifier= Modifier
-                        .height(50.dp)
-                        .width(50.dp)
-                        .offset(50.dp, 1.dp)
+                        .height(80.dp)
+                        .width(80.dp)
+                        .offset(40.dp, -60.dp)
                         .shadow(15.dp,RoundedCornerShape(5.dp))
                         ,
                     colors = ButtonDefaults.buttonColors(containerColor = Color(59,67,119,255))
                     ) {
                     Text("?",
-                        fontSize = 25.sp,
+                        fontSize = 35.sp,
                         textAlign = TextAlign.Center,
                         fontWeight = FontWeight.ExtraBold
                         )

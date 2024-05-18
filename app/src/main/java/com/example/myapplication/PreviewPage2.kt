@@ -89,8 +89,6 @@ fun PreviewPage2() {
             )
             Column() {
                 Box(
-
-
                     modifier = Modifier
                         .size(height = 100.dp, width = 300.dp)
                         .offset(-20.dp, 215.dp)
@@ -115,8 +113,9 @@ fun PreviewPage2() {
                         label = {
                             Text(
                                 "Enter Player-1 Name",
-                                fontSize = 10.sp,
-                                color = Color(94, 107, 147, 255)
+                                fontSize = 8.sp,
+                                color = Color(94, 107, 147, 255),
+                                fontWeight = FontWeight.ExtraBold
                             )
                         })
 
@@ -130,7 +129,7 @@ fun PreviewPage2() {
                     Text(
                         "- - - - - - - - - - - - -  ",
                         color = Color(254, 95, 86, 255),
-                        modifier = Modifier.offset(20.dp, 80.dp)
+                        modifier = Modifier.offset(5.dp, 80.dp)
                     )
                 }
                 Spacer(modifier = Modifier.padding(15.dp))
@@ -139,7 +138,7 @@ fun PreviewPage2() {
 
                     modifier = Modifier
                         .size(height = 100.dp, width = 300.dp)
-                        .offset(-20.dp, 215.dp)
+                        .offset(-25.dp, 215.dp)
                         .clip(RoundedCornerShape(10.dp))
                         .background(color = Color(61, 65, 117, 255))
                 ) {
@@ -161,8 +160,9 @@ fun PreviewPage2() {
                         label = {
                             Text(
                                 "Enter Player-2 Name",
-                                fontSize = 10.sp,
-                                color = Color(94, 107, 147, 255)
+                                fontSize = 8.sp,
+                                color = Color(94, 107, 147, 255),
+                                fontWeight = FontWeight.ExtraBold
                             )
                         })
 
@@ -170,13 +170,14 @@ fun PreviewPage2() {
                         painter = painter4, contentDescription = "Text",
                         modifier = Modifier
                             .size(55.dp)
-                            .offset(50.dp, 0.dp),
+                            .offset(40.dp, 0.dp),
                         alignment = Alignment.TopCenter
                     )
                     Text(
                         "- - - - - - - - - - - - -  ",
                         color = Color(47, 183, 241, 255),
-                        modifier = Modifier.offset(20.dp, 80.dp)
+                        modifier = Modifier.offset(5.dp, 80.dp),
+                        fontWeight = FontWeight.ExtraBold
                     )
                 }
 
@@ -185,32 +186,33 @@ fun PreviewPage2() {
 
 
                 Spacer(modifier = Modifier.padding(10.dp))
-                    Image(
-                        painter = painter2, contentDescription = "Image",
-                        modifier = Modifier
-//                            .size(height=200.dp,width=650.dp)
-                            .offset(-125.dp, 150.dp)
-                            .border(width = 10.dp,color=Color.Black)
-                    )
-                    Button(
-                        onClick = { pageState.value = 2 },
-                        colors = ButtonDefaults.buttonColors(containerColor = Color(46, 182, 241, 255)),
-                        modifier = Modifier
-                            .size(width = 200.dp, height = 80.dp)
-                            .offset(-130.dp, 200.dp)
-                            .shadow(25.dp, RoundedCornerShape(5.dp))
 
-                    ) {
-                        Text(
-                            "START",
-                            fontSize = 32.sp,
-                            textAlign = TextAlign.Center
-                        )
-                    }
                 }
 
 
                }
+        Image(
+            painter = painter2, contentDescription = "Image",
+            modifier = Modifier
+                           .size(height=200.dp,width=650.dp)
+                .offset(-5.dp, 130.dp)
+
+        )
+        Button(
+            onClick = { pageState.value = 2 },
+            colors = ButtonDefaults.buttonColors(containerColor = Color(46, 182, 241, 255)),
+            modifier = Modifier
+                .size(width = 200.dp, height = 80.dp)
+                .offset(80.dp, 230.dp)
+                .shadow(25.dp, RoundedCornerShape(5.dp))
+
+        ) {
+            Text(
+                "START",
+                fontSize = 32.sp,
+                textAlign = TextAlign.Center
+            )
+        }
 
             }
         }

@@ -55,32 +55,63 @@ import androidx.compose.ui.semantics.Role.Companion.Button
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import java.util.ArrayList
+
 @Composable
 fun PreviewPage3() {
     var painter = painterResource(id = R.drawable.appdev3)
+    var list= mutableListOf<Int>()
+    fun GridLogic(index: Int) {
+        if ((GridVal[index] > 3 && P1Cnt.value > 0)) {
 
-    fun Grid(index :Int){
-        if((GridVal[index]>3 && P1Cnt.value>0)) {
+
+
             if (listOf(0, 4, 24, 20).contains(index)) {
+
                 if (GridVal[index] > 3 && P1Cnt.value > 0) {
                     GridVal[index] = 0
 
                     if (index == 0) {
                         GridVal[index + 1] += 1
-
+                        Grid[index+1]=1
                         GridVal[index + 5] += 1
-                    } else if (index == 4) {
+                        Grid[index+5]=1
+                        ValColor[index+1]=ValColor[index]
+                        ValColor[index+5]=ValColor[index]
+                        Grid3[index+1]=Grid3[index]
+                        Grid3[index+5]=Grid3[index]
+
+                    }
+                    else if (index == 4) {
                         GridVal[index - 1] += 1
-
+                        Grid[index-1]=1
                         GridVal[index + 5] += 1
-                    } else if (index == 20) {
+                        Grid[index+5]=1
+                        ValColor[index-1]= ValColor[index]
+                        ValColor[index+5]=ValColor[index]
+                        Grid3[index-1]=Grid3[index]
+                        Grid3[index+5]=Grid3[index]
+
+                    }
+                    else if (index == 20) {
                         GridVal[index + 1] += 1
-
+                        Grid[index+1]=1
                         GridVal[index - 5] += 1
-                    } else {
+                        Grid[index-5]=1
+                        ValColor[index+1]= ValColor[index]
+                        ValColor[index-5]= ValColor[index]
+                        Grid3[index+1]=Grid3[index]
+                        Grid3[index-5]=Grid3[index]
+                    }
+                    else {
                         GridVal[index - 1] += 1
-
+                        Grid[index-1]=1
                         GridVal[index - 5] += 1
+                        Grid[index-5]=1
+                        ValColor[index-1]=ValColor[index]
+                        ValColor[index-5]= ValColor[index]
+                        Grid3[index-1]=Grid3[index]
+                        Grid3[index-5]=Grid3[index]
                     }
 
                 }
@@ -89,23 +120,61 @@ fun PreviewPage3() {
                 if (listOf(1, 2, 3).contains(index)) {
                     GridVal[index] = 0
                     GridVal[index + 1] += 1
+                    Grid[index+1]=1
                     GridVal[index - 1] += 1
+                    Grid[index-1]=1
                     GridVal[index + 5] + 1
+                    Grid[index+5]=1
+                    ValColor[index+1]= ValColor[index]
+                    ValColor[index-1]= ValColor[index]
+                    ValColor[index+5]= ValColor[index]
+                    Grid3[index+1]=Grid3[index]
+                    Grid3[index+5]=Grid3[index]
+                    Grid3[index-1]=Grid3[index]
+
+
                 } else if (listOf(5, 10, 15).contains(index)) {
                     GridVal[index] = 0
                     GridVal[index + 1] += 1
                     GridVal[index - 5] += 1
                     GridVal[index + 5] += 1
+                    Grid[index + 1] = 1
+                    Grid[index - 5] = 1
+                    Grid[index + 5] = 1
+                    ValColor[index+1]= ValColor[index]
+                    ValColor[index-5]= ValColor[index]
+                    ValColor[index+5]= ValColor[index]
+                    Grid3[index+1]=Grid3[index]
+                    Grid3[index+5]=Grid3[index]
+                    Grid3[index-5]=Grid3[index]
                 } else if (listOf(21, 22, 23).contains(index)) {
                     GridVal[index] = 0
                     GridVal[index - 1] += 1
                     GridVal[index - 5] += 1
-                    GridVal[index + 1] + 1
+                    GridVal[index + 1] += 1
+                    Grid[index - 1] = 1
+                    Grid[index - 5] = 1
+                    Grid[index + 1] = 1
+                    ValColor[index+1]= ValColor[index]
+                    ValColor[index-1]= ValColor[index]
+                    ValColor[index-5]= ValColor[index]
+                    Grid3[index+1]=Grid3[index]
+                    Grid3[index-5]=Grid3[index]
+                    Grid3[index-1]=Grid3[index]
                 } else {
                     GridVal[index] = 0
                     GridVal[index - 1] += 1
                     GridVal[index - 5] += 1
-                    GridVal[index + 5] + 1
+                    GridVal[index + 5] += 1
+                    Grid[index - 1] = 1
+                    Grid[index - 5] = 1
+                    Grid[index + 5] = 1
+                    ValColor[index+1]= ValColor[index]
+                    ValColor[index-5]= ValColor[index]
+                    ValColor[index+5]= ValColor[index]
+                    Grid3[index+1]=Grid3[index]
+                    Grid3[index+5]=Grid3[index]
+                    Grid3[index-5]=Grid3[index]
                 }
             } else {
                 GridVal[index] = 0
@@ -113,6 +182,20 @@ fun PreviewPage3() {
                 GridVal[index + 1] += 1
                 GridVal[index - 5] += 1
                 GridVal[index - 1] += 1
+                Grid[index + 5] = 1
+                Grid[index + 1] = 1
+                Grid[index - 5] = 1
+                Grid[index - 1] = 1
+                ValColor[index+1]= ValColor[index]
+                ValColor[index-1]= ValColor[index]
+                ValColor[index+5]= ValColor[index]
+                ValColor[index-5]=ValColor[index]
+                Grid3[index+1]=Grid3[index]
+                Grid3[index+5]=Grid3[index]
+                Grid3[index-1]=Grid3[index]
+
+                Grid3[index-5]=Grid3[index]
+
             }
         }
 
@@ -132,10 +215,12 @@ fun PreviewPage3() {
         Button(
             onClick = { /*TODO*/ },
             modifier = Modifier
-                .offset(350.dp)
-                .padding(12.dp)
+                .offset(300.dp)
+                .padding(6.dp)
+                .height(50.dp)
+                .width(50.dp)
         ) {
-            Text("X")
+            Text("X",textAlign=TextAlign.Center)
         }
         Row() {
             Card() {}
@@ -148,69 +233,128 @@ fun PreviewPage3() {
             .fillMaxSize()
             .padding(64.dp) // Add padding for better visibility
             .height(200.dp)
-            //.border(width = 2.dp, color = Color.Black)
+        //.border(width = 2.dp, color = Color.Black)
 
     ) {
         LazyVerticalGrid(columns = GridCells.Fixed(5)) {
             items(25) { index ->
                 Button(
-                    onClick = {
-                        PageColor.value = if (PageColor.value == 0) 1 else 0
-                        Grid[index] = 1
-                        ValColor[index] = if (PageColor.value == 0) 1 else 0
-                        Grid2[index] = if (ValColor[index] == 0) 0 else 1
 
-                        if (Grid3[index] == -1) {
-                            Grid3[index] = Grid2[index]
-                        }
-                        if (ValColor[index] == 0) {
-                            P1Cnt.value += 1
-
-                        } else {
-
-                            P2Cnt.value += 1
-                        }
-                        if (ValColor[index] == 0) {
-                            if (P1Cnt.value == 0) {
-                                GridVal[index] = 3
-                            } else  {
-                                GridVal[index] +=1
+                        onClick = {
+                            if(P1Cnt.value==-1 || P2Cnt.value==-1){
+                                index in listOf(0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24)
                             }
-                        } else {
-                            if (P2Cnt.value == 0) {
-                                GridVal[index] = 3
-                            } else {
-                                GridVal[index] += 1
+                            else{
+                                for (i in 0..24){
+                                    if(Grid[i]==1){
+                                        list.add(index)
+                                    }
+                                }
+                                index in list
                             }
+
+                            if (Grid[index] == 0) {
+                                PageColor.value = if (PageColor.value == 0) 1 else 0
+                                Grid[index] = 1
+                                ValColor[index] = if (PageColor.value == 0) 1 else 0
+                                Grid2[index] = if (ValColor[index] == 0) 0 else 1
+
+                                if (Grid3[index] == -1) {
+                                    Grid3[index] = Grid2[index]
+                                    ButtonState[index] = Grid2[index]
+                                }
+                                if (ValColor[index] == 0) {
+                                    P1Cnt.value += 1
+
+                                } else {
+
+                                    P2Cnt.value += 1
+                                }
+                                if (ValColor[index] == 0) {
+                                    if (P1Cnt.value == 0) {
+                                        GridVal[index] = 3
+                                    } else {
+                                        GridVal[index] += 1
+                                    }
+                                } else {
+                                    if (P2Cnt.value == 0) {
+                                        GridVal[index] = 3
+                                    } else {
+                                        GridVal[index] += 1
+                                    }
+                                }
+
+                            }
+//                            else  (){
+                                    //if(index in list){
+//                                    PageColor.value = if (PageColor.value == 0) 1 else 0
+//
+//                                    ValColor[index] = if (PageColor.value == 0) 1 else 0
+//                                    Grid2[index] = if (ValColor[index] == 0) 0 else 1
+//
+//                                    if (Grid3[index] == -1) {
+//                                        Grid3[index] = Grid2[index]
+//                                        ButtonState[index] = Grid2[index]
+//                                    }
+//                                    if (ValColor[index] == 0) {
+//                                        P1Cnt.value += 1
+//
+//                                    } else {
+//
+//                                        P2Cnt.value += 1
+//                                    }
+//                                    if (ValColor[index] == 0) {
+//                                        if (P1Cnt.value == 0) {
+//                                            GridVal[index] = 3
+//                                        } else {
+//                                            GridVal[index] += 1
+//                                        }
+//                                    } else {
+//                                        if (P2Cnt.value == 0) {
+//                                            GridVal[index] = 3
+//                                        } else {
+//                                            GridVal[index] += 1
+//                                        }
+//
+//
+//                                }
+//                            }
+                                  //                            }
+
                         }
-                    },
+
+                    ,
                     modifier = Modifier
-                        .padding(2.dp)
+                        .padding(0.dp)
                         .aspectRatio(1f)
                         .clip(RoundedCornerShape(16.dp))
-                        .shadow(elevation = 16.dp),
+                        .shadow(elevation = 0.dp),
                     colors = ButtonDefaults.buttonColors(containerColor = Color(244, 228, 206, 255))
 
                 ) {
-//                    if (Grid3[index] == 0 && ButtonState[index] == -1)
-//                        ButtonState[index] = 0
-//                    else if (Grid3[index] == 1 && ButtonState[index] == -1)
-//                        ButtonState[index] = 1
-                    //if(Grid3[index]==0){
-                    Text(GridVal[index].toString(),
-                        color=Color(255, 94, 86, 255))}
-//else{
-//                        Text(GridVal[index].toString(),
-//                            color=Color(47, 183, 241, 255))
-//                    //}
-                        Grid(index)
 
+
+
+                    if(Grid[index]==1 && ValColor[index]==0 && Grid3[index]==0){
+
+                        Text(GridVal[index].toString(),
+                            color=Color(255, 94, 86, 255))
+                    }
+                    else if(Grid[index]==1 && ValColor[index]==1 && Grid3[index]==1
+                        ){
+                        Text(GridVal[index].toString(),
+                            color=Color(47, 183, 241, 255))
+                    }
+
+
+                    GridLogic(index)
 
 
                 }
             }
         }
     }
+}
 
 
 
