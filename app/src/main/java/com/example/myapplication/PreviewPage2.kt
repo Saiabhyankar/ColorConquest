@@ -134,8 +134,6 @@ fun PreviewPage2() {
                 }
                 Spacer(modifier = Modifier.padding(15.dp))
                 Box(
-
-
                     modifier = Modifier
                         .size(height = 100.dp, width = 300.dp)
                         .offset(-25.dp, 215.dp)
@@ -180,30 +178,23 @@ fun PreviewPage2() {
                         fontWeight = FontWeight.ExtraBold
                     )
                 }
-
-
-
-
-
                 Spacer(modifier = Modifier.padding(10.dp))
-
                 }
-
-
                }
         Image(
             painter = painter2, contentDescription = "Image",
             modifier = Modifier
-                           .size(height=200.dp,width=650.dp)
-                .offset(-5.dp, 130.dp)
+                           .size(height=350.dp,width=650.dp)
+                .offset(0.dp, 30.dp)
 
         )
-        Button(
+        Column(){
+            Button(
             onClick = { pageState.value = 2 },
             colors = ButtonDefaults.buttonColors(containerColor = Color(46, 182, 241, 255)),
             modifier = Modifier
                 .size(width = 200.dp, height = 80.dp)
-                .offset(80.dp, 230.dp)
+                .offset(100.dp, 90.dp)
                 .shadow(25.dp, RoundedCornerShape(5.dp))
 
         ) {
@@ -213,6 +204,9 @@ fun PreviewPage2() {
                 textAlign = TextAlign.Center
             )
         }
+
+        }
+
 
             }
         }

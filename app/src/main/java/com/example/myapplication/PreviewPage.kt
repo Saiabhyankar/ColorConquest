@@ -61,6 +61,7 @@ fun PreviewPage(){
     var painter= painterResource(id = R.drawable.image1)
     var showDialog by remember {
         mutableStateOf(false)
+
     }
     Column(
         modifier= Modifier.size(10.dp),
@@ -122,7 +123,7 @@ fun PreviewPage(){
                         .height(80.dp)
                         .width(80.dp)
                         .offset(40.dp, -60.dp)
-                        .shadow(15.dp,RoundedCornerShape(5.dp))
+                        .shadow(15.dp, RoundedCornerShape(5.dp))
                         ,
                     colors = ButtonDefaults.buttonColors(containerColor = Color(59,67,119,255))
                     ) {
@@ -133,7 +134,34 @@ fun PreviewPage(){
                         )
                 }
 
-
+                if(showDialog){
+                    AlertDialog(onDismissRequest = { showDialog=false}, confirmButton = { /*TODO*/ },
+                        modifier = Modifier
+                            .size(height = 600.dp, width = 350.dp),
+                        containerColor =  Color(232,96,43,255),
+                        text={
+                            Text(
+                                "First Turn: \n" +
+                                        "Players can choose any tile on the grid."+
+                                        "Clicking a tile assigns your color and awards you 3 points on that tile.\n" +
+                                        "Subsequent Turns:\n" +
+                                        "Players can only click tiles that already have their color.\n" +
+                                        "Clicking a tile with your color adds 1 point to that tile.\n" +
+                                        "The background color indicates the next player's turn.\n" +
+                                        "Conquest and Expansion:\n" +
+                                        "\n" +
+                                        "When a tile with your color reaches 4 points, it triggers an expansion:\n" +
+                                        "The original tile's color disappears.\n" +
+                                        "Your color spreads to the four surrounding squares (up, down, left, right).\n" +
+                                        "Each surrounding square gains 1 point with your color.\n" +
+                                        "If a surrounding square has your opponent's color, you conquer it, adding a point and erasing their color.\n" +
+                                        "Expansion retriggers if a neighboring tile also reaches 4 points.\n" +
+                                        "Objective:\n" +
+                                        "\n" +
+                                        "Take turns clicking on tiles to eliminate your opponent's color entirely from the screen.",
+                                 color=Color.White)
+                        })
+                }
 
             }
         }
