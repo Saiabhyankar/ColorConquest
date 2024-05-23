@@ -22,9 +22,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.Preview
 import com.example.myapplication.ui.theme.MyApplicationTheme
 
-var buttonText = mutableStateOf(0)
 var pageState = mutableIntStateOf(0)
-var GameState = mutableIntStateOf(0)
 var PageColor= mutableIntStateOf(0)
 var Grid= mutableStateListOf(0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0)
 var Grid2= mutableStateListOf(0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0)
@@ -37,9 +35,10 @@ var player2Name=mutableStateOf("")
 var GridVal=mutableStateListOf(0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0)
 var P1Cnt= mutableIntStateOf(-1)
 var P2Cnt= mutableIntStateOf(-1)
-var ButtonState = mutableStateListOf(-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1)
 var Turn = mutableIntStateOf(0)
 var DialogBox= mutableStateOf(true)
+var WinnerList= mutableStateListOf("")
+
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

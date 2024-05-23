@@ -50,12 +50,14 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.draw.rotate
 import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.Color.Companion.White
 import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.semantics.Role.Companion.Button
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -66,8 +68,8 @@ import java.util.ArrayList
 fun PreviewPage3() {
     var painter = painterResource(id = R.drawable.appdev3)
     var list= mutableListOf<Int>(25)
-    var list1= remember {mutableStateListOf<Int>() }
-    var list2= remember{mutableStateListOf<Int>()}
+    var list1=  mutableListOf<Int>(25)
+    var list2= mutableListOf<Int>(25)
     var painter1= painterResource(id = R.drawable.appdec6)
     fun GridLogic(index: Int) {
         if ((GridVal[index] >3 && P1Cnt.value > 0)) {
@@ -198,7 +200,7 @@ fun PreviewPage3() {
                 }
             } else {
                 GridVal[index] = 0
-                list.remove(index)
+
                 GridVal[index + 5] += 1
                 GridVal[index + 1] += 1
                 GridVal[index - 5] += 1
@@ -276,8 +278,11 @@ fun PreviewPage3() {
                     color=Color(47, 183, 241, 255),
                     modifier = Modifier
                         .padding(16.dp)
-                        .offset(120.dp, 0.dp),
-                    textAlign = TextAlign.Right
+                        .offset(120.dp, 0.dp)
+                        .rotate(180f),
+                    textAlign = TextAlign.Right,
+                    fontSize = 24.sp,
+
                 )
 
 
@@ -295,11 +300,10 @@ fun PreviewPage3() {
                         color = Color(47, 183, 241, 255),
                         modifier = Modifier
                             .padding(16.dp)
+                            .rotate(180f)
                             ,
                         fontSize = 24.sp,
                         textAlign = TextAlign.Center
-
-
                         )
             }
         }
@@ -308,60 +312,57 @@ fun PreviewPage3() {
         contentAlignment = Alignment.Center,
         modifier = Modifier
             .fillMaxWidth()
-            .padding(30.dp)
-            .size(height = 300.dp, width = 350.dp)// Add padding for better visibility
-            //.height(200.dp)
-
-        //.border(width = 2.dp, color = Color.Black)
-
+            .padding(25.dp)
+            .size(height = 300.dp, width = 350.dp)
     ) {
         LazyVerticalGrid(columns = GridCells.Fixed(5)) {
             items(25) { index ->
                 Button(
                         shape = RoundedCornerShape(10),
-
                         onClick = {
+
                             if(Grid[index]==1 && (P1Cnt.value>=0 && GridVal[index]!=0 )){
                                 list.add(index)
                             }
-
+                            if (Grid3[index]==0 && Grid[index]==1){
+                                list1.add(index)
+                            }
+                            else if(Grid3[index]==1 && Grid[index]==1 ){
+                                list2.add(index)
+                            }
                             if ( (index in list || P1Cnt.value==-1|| P2Cnt.value==-1)) {
-                                PageColor.value = if (PageColor.value == 0) 1 else 0
-                                Grid[index] = 1
-                                ValColor[index] = if (PageColor.value == 0) 1 else 0
-                                Grid2[index] = if (ValColor[index] == 0) 0 else 1
-                                Turn.value=  if (ValColor[index] == 0) 0 else 1
-                                if (Grid3[index] == -1) {
-                                    Grid3[index] = Grid2[index]
-                                    ButtonState[index] = Grid2[index]
-                                }
-                                if (ValColor[index] == 0) {
-                                    P1Cnt.value += 1
-
-
-                                } else {
-
-                                    P2Cnt.value += 1
-                                }
-                                if (ValColor[index] == 0) {
-
-                                    if (P1Cnt.value == 0) {
-                                        GridVal[index] = 3
-
-                                    } else {
-                                        GridVal[index] += 1
-
+                               if (((Turn.value == 0 && index in list1)|| P1Cnt.value==-1) ||( (Turn.value == 1 && index in list2)|| P2Cnt.value==-1)) {
+                                    PageColor.value = if (PageColor.value == 0) 1 else 0
+                                    Grid[index] = 1
+                                    ValColor[index] = if (PageColor.value == 0) 1 else 0
+                                    Grid2[index] = if (ValColor[index] == 0) 0 else 1
+                                    Turn.value = if (Turn.value == 0) 1 else 0
+                                    if (Grid3[index] == -1) {
+                                        Grid3[index] = Grid2[index]
                                     }
-                                } else {
-                                    if (P2Cnt.value == 0) {
-                                        GridVal[index] = 3
-
+                                    if (ValColor[index] == 0) {
+                                        P1Cnt.value += 1
                                     } else {
-                                        GridVal[index] += 1
+                                        P2Cnt.value += 1
+                                    }
+                                    if (ValColor[index] == 0) {
 
+                                        if (P1Cnt.value == 0) {
+                                            GridVal[index] = 3
+
+                                        } else {
+                                            GridVal[index] += 1
+
+                                        }
+                                    } else {
+                                        if (P2Cnt.value == 0) {
+                                            GridVal[index] = 3
+
+                                        } else {
+                                            GridVal[index] += 1
+                                        }
                                     }
                                 }
-
                             }
 
                                   },
@@ -457,6 +458,8 @@ fun PreviewPage3() {
     }
     if((P1Score.value==0 || P2Score.value==0 )&& P1Cnt.value>0){
             var name= if (P1Score.value==0) player2Name.value else player1Name.value
+            WinnerList.add(name)
+            //GridState.value=1
         AlertDialog(onDismissRequest = { DialogBox.value=false }, confirmButton = { /*TODO*/ },
             containerColor =  Color(60,64,117,255),
             modifier = Modifier.size(height=350.dp,width=250.dp),
@@ -464,36 +467,54 @@ fun PreviewPage3() {
             text={
                 Column (
                 ){
-                        Box(modifier = Modifier
-                            .offset(0.dp,250.dp))
-                             {
-                            Text(player1Name.value)
-                        }
+                    Card (
+                        shape = RoundedCornerShape(20.dp),
+                        colors = CardDefaults.cardColors(containerColor = Color(255,255,255,255)),
+                        modifier=Modifier
+                        .size(width = 220.dp, height = 50.dp),
 
-
+                    ){
+                        Text(name.toUpperCase(),
+                            color = Color.Black,
+                            modifier=Modifier
+                                .offset(15.dp,5.dp),
+                            fontWeight = FontWeight.ExtraBold,
+                            fontSize = 20.sp,
+                            textAlign = TextAlign.Center
+                        )
+                    }
                     Image(painter=painter1,
                         contentDescription = "i",
                         modifier = Modifier
                             .size(50.dp)
-                            .offset(75.dp, 100.dp)
-                            .border(2.dp, color = Color.Black)
+                            .offset(75.dp, 40.dp)
+
                     )
+                    Text("WINS !!",
+                        fontSize = 24.sp,
+                        fontWeight = FontWeight.ExtraBold,
+                        modifier = Modifier
+                            .offset(60.dp,60.dp))
                     Column {
-                        Button(onClick = { DialogBox.value=false},
+
+                        Button(onClick = { },
                             modifier = Modifier
-                                .offset(0.dp, 160.dp)
-                                .size(width = 220.dp, height = 40.dp)){
-                            Text("Play Again",
-                                color=Color.White)
+                                .offset(0.dp, 80.dp)
+                                .size(width = 220.dp, height = 50.dp)){
+                           Text("Play Again",
+                                color=Color.White,
+                                fontSize = 24.sp)
                         }
                         Spacer(modifier =Modifier
                             .padding(5 .dp))
                         Button(onClick = { pageState.value=0},
                             modifier = Modifier
-                                .offset(0.dp, 160.dp)
-                                .size(width = 220.dp, height = 40.dp),
+                                .offset(0.dp, 80.dp)
+                                .size(width = 220.dp, height = 50.dp),
                             colors = ButtonDefaults.buttonColors(containerColor = Color(254,95,86,255))){
-                            Text("Home")
+                            Text("Home",
+                                fontSize = 24.sp,
+                                color = Color.White)
                         }
                     }
 
