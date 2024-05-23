@@ -35,6 +35,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.shadow
+import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.modifier.modifierLocalConsumer
 import androidx.compose.ui.res.painterResource
@@ -47,7 +48,14 @@ import androidx.compose.ui.unit.sp
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun PreviewPage2() {
+fun PreviewPage2(navigateToThirdPage:()->Unit) {
+    val gradient = Brush.verticalGradient(
+        0.0f to Color(254,194,113,255),
+        1.0f to Color(254,99,109,255),
+        startY = 0.0f,
+        endY = 1500.0f
+    )
+    Box(modifier = Modifier.background(gradient))
     var painter1 = painterResource(id = R.drawable.appdev2)
     var painter2 = painterResource(id = R.drawable.image1)
     var painter3 = painterResource(id = R.drawable.appdev4)
@@ -66,7 +74,7 @@ fun PreviewPage2() {
                 colors = CardDefaults.cardColors(containerColor = Color(254, 215, 183, 255))
             ) {
                 Text(
-                    "      PLAYER INFORMATION",
+                    "    PLAYER INFORMATION",
                     color = Color.Black,
                     fontSize = 24.sp,
                     textAlign = TextAlign.Center,
@@ -84,15 +92,15 @@ fun PreviewPage2() {
             Image(
                 painter = painter1, contentDescription = "PlayerIcon",
                 modifier = Modifier
-                    .offset(-10.dp, 200.dp)
-                    .size(250.dp)
+                    .offset(-10.dp, 210.dp)
+                    .size(240.dp)
             )
             Column() {
                 Box(
                     modifier = Modifier
                         .size(height = 100.dp, width = 300.dp)
                         .offset(-20.dp, 215.dp)
-                        .clip(RoundedCornerShape(10.dp))
+                        .clip(RoundedCornerShape(30.dp))
                         .background(color = Color(61, 65, 117, 255))
                 ) {
                     TextField(value = player1Name.value, onValueChange = { player1Name.value = it },
@@ -137,7 +145,7 @@ fun PreviewPage2() {
                     modifier = Modifier
                         .size(height = 100.dp, width = 300.dp)
                         .offset(-25.dp, 215.dp)
-                        .clip(RoundedCornerShape(10.dp))
+                        .clip(RoundedCornerShape(30.dp))
                         .background(color = Color(61, 65, 117, 255))
                 ) {
                     TextField(value = player2Name.value, onValueChange = { player2Name.value = it },
@@ -190,11 +198,12 @@ fun PreviewPage2() {
         )
         Column(){
             Button(
-            onClick = { pageState.value = 2 },
+            onClick = { navigateToThirdPage()
+                      pageState.value=1},
             colors = ButtonDefaults.buttonColors(containerColor = Color(46, 182, 241, 255)),
             modifier = Modifier
                 .size(width = 200.dp, height = 80.dp)
-                .offset(100.dp, 90.dp)
+                .offset(90.dp, 50.dp)
                 .shadow(25.dp, RoundedCornerShape(5.dp))
 
         ) {
@@ -203,13 +212,10 @@ fun PreviewPage2() {
                 fontSize = 32.sp,
                 textAlign = TextAlign.Center
             )
-        }
-
-        }
-
-
             }
         }
+    }
+}
 
 
 

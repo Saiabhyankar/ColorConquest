@@ -45,8 +45,13 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.myapplication.ui.theme.fontFamily
 
+//@Composable
+//fun VerticalGradient() {
+//
+//}
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun VerticalGradient() {
+fun PreviewPage(navigateToSecondPage:()->Unit){
     val gradient = Brush.verticalGradient(
         0.0f to Color(254,194,113,255),
         1.0f to Color(254,99,109,255),
@@ -54,10 +59,6 @@ fun VerticalGradient() {
         endY = 1500.0f
     )
     Box(modifier = Modifier.background(gradient))
-}
-@OptIn(ExperimentalMaterial3Api::class)
-@Composable
-fun PreviewPage(){
     var painter= painterResource(id = R.drawable.image1)
     var showDialog by remember {
         mutableStateOf(false)
@@ -107,7 +108,7 @@ fun PreviewPage(){
                 verticalAlignment = Alignment.CenterVertically,
                 horizontalArrangement = Arrangement.Center
             ){
-                Button(onClick = { pageState.value=1 },
+                Button(onClick = { navigateToSecondPage()},
                     colors = ButtonDefaults.buttonColors(containerColor = Color(46,182,241,255)),
                     modifier = Modifier
                         .size(width = 200.dp, height = 80.dp)
@@ -118,7 +119,7 @@ fun PreviewPage(){
                         textAlign = TextAlign.Center)
             }
                 Spacer(Modifier.width(5.dp))
-                Button(onClick = { showDialog=true },
+                Button(onClick = { showDialog=true},
                     modifier= Modifier
                         .height(80.dp)
                         .width(80.dp)

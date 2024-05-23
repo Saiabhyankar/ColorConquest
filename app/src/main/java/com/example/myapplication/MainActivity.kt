@@ -20,14 +20,17 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.navigation.compose.NavHost
+import androidx.navigation.compose.composable
+import androidx.navigation.compose.rememberNavController
 import com.example.myapplication.ui.theme.MyApplicationTheme
 
 var pageState = mutableIntStateOf(0)
 var PageColor= mutableIntStateOf(0)
 var Grid= mutableStateListOf(0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0)
 var Grid2= mutableStateListOf(0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0)
-val Grid3= mutableStateListOf(-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1)
-var ValColor= mutableStateListOf(-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1)
+val Grid3= mutableStateListOf(-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1)
+var ValColor= mutableStateListOf(-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1)
 var P1Score= mutableIntStateOf(0)
 var P2Score= mutableIntStateOf(0)
 var player1Name=mutableStateOf("")
@@ -44,29 +47,38 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
         setContent {
             MyApplicationTheme {
-                // A surface container using the 'background' color from the theme
                 Surface(
                     modifier = Modifier.fillMaxSize(),
                     color = MaterialTheme.colorScheme.background
                 ) {
-                    if(pageState.intValue==0){
-                        VerticalGradient()
-                        PreviewPage()
-                    }
-                    else if(pageState.intValue==1){
-                        VerticalGradient()
-                        PreviewPage2()
-                    }
-                    else if(pageState.intValue==2){
-                        PreviewPage3()
 
+                    val navController = rememberNavController()
+                    NavHost(navController = navController, startDestination = "firstScreen") {
+                        composable("firstscreen") {
+                            PreviewPage {
+                                navController.navigate("secondscreen")
+                            }
+                        }
+                        composable("secondscreen") {
+                            PreviewPage2 {
+                                navController.navigate(("thirdscreen"))
+                            }
+                        }
+                        composable("thirdscreen") {
+                            PreviewPage3 {
+                                navController.navigate("secondscreen")
+                            }
+                        }
                     }
-
-
 
                 }
+
             }
         }
     }
 }
+
+
+
+
 

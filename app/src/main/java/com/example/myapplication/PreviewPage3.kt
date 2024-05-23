@@ -65,7 +65,7 @@ import androidx.core.graphics.rotationMatrix
 import java.util.ArrayList
 
 @Composable
-fun PreviewPage3() {
+fun PreviewPage3(navigateToSecondScreen: () -> Unit) {
     var painter = painterResource(id = R.drawable.appdev3)
     var list= mutableListOf<Int>(25)
     var list1=  mutableListOf<Int>(25)
@@ -142,7 +142,7 @@ fun PreviewPage3() {
                     Grid[index+1]=1
                     GridVal[index - 1] += 1
                     Grid[index-1]=1
-                    GridVal[index + 5] + 1
+                    GridVal[index + 5] += 1
                     Grid[index+5]=1
                     ValColor[index+1]= ValColor[index]
                     ValColor[index-1]= ValColor[index]
@@ -191,10 +191,10 @@ fun PreviewPage3() {
                     Grid[index - 1] = 1
                     Grid[index - 5] = 1
                     Grid[index + 5] = 1
-                    ValColor[index+1]= ValColor[index]
+                    ValColor[index-1]= ValColor[index]
                     ValColor[index-5]= ValColor[index]
                     ValColor[index+5]= ValColor[index]
-                    Grid3[index+1]=Grid3[index]
+                    Grid3[index-1]=Grid3[index]
                     Grid3[index+5]=Grid3[index]
                     Grid3[index-5]=Grid3[index]
                 }
@@ -226,7 +226,7 @@ fun PreviewPage3() {
     fun GamePoint(){
         P1Score.value=0
         P2Score.value=0
-        for (i in 0 until 24){
+        for (i in 0 .. 24){
 
             if(ValColor[i]==0){
              P1Score.value+=GridVal[i]}
@@ -319,6 +319,7 @@ fun PreviewPage3() {
             items(25) { index ->
                 Button(
                         shape = RoundedCornerShape(10),
+
                         onClick = {
 
                             if(Grid[index]==1 && (P1Cnt.value>=0 && GridVal[index]!=0 )){
@@ -367,17 +368,19 @@ fun PreviewPage3() {
 
                                   },
                     modifier = Modifier
-                        .padding(1.dp)
+                        .padding(5.dp)
                         .aspectRatio(1f)
                         .clip(RoundedCornerShape(16.dp))
-                        .shadow(elevation = 0.dp),
+                        .shadow(elevation = 200.dp),
                     colors = ButtonDefaults.buttonColors(containerColor = Color(244, 228, 206, 255))
 
                 ) {
                     GamePoint()
                     if(Grid[index]==1 && ValColor[index]==0 && Grid3[index]==0 ){
                         if (GridVal[index]!=0){
-                            Box(){
+                            Box(modifier = Modifier.size(height = 150.dp, width = 150.dp)
+                                .fillMaxWidth(),
+                                contentAlignment = Alignment.Center){
                                 Image(painter = painter, contentDescription = "icon")
                                 Text(
                                     GridVal[index].toString(),
@@ -459,11 +462,10 @@ fun PreviewPage3() {
     if((P1Score.value==0 || P2Score.value==0 )&& P1Cnt.value>0){
             var name= if (P1Score.value==0) player2Name.value else player1Name.value
             WinnerList.add(name)
-            //GridState.value=1
         AlertDialog(onDismissRequest = { DialogBox.value=false }, confirmButton = { /*TODO*/ },
             containerColor =  Color(60,64,117,255),
             modifier = Modifier.size(height=350.dp,width=250.dp),
-
+            iconContentColor =Color(193,232,250,255),
             text={
                 Column (
                 ){
@@ -497,7 +499,20 @@ fun PreviewPage3() {
                             .offset(60.dp,60.dp))
                     Column {
 
-                        Button(onClick = { },
+                        Button(onClick = {  P1Cnt.value=-1
+                                            P2Cnt.value=-1
+                                            PageColor.value=0
+                                            var list= mutableListOf<Int>(25)
+                                            var list1= mutableListOf<Int>(25)
+                                            var list2= mutableListOf<Int>(25)
+                                            Turn.value=0
+                                         for (i in 0..24){
+                                             Grid[i]=0
+                                             GridVal[i]=0
+                                             Grid2[i]=-1
+                                             Grid3[i]=-1
+                                             ValColor[i]=-1
+                                         }},
                             modifier = Modifier
                                 .offset(0.dp, 80.dp)
                                 .size(width = 220.dp, height = 50.dp)){
@@ -507,7 +522,8 @@ fun PreviewPage3() {
                         }
                         Spacer(modifier =Modifier
                             .padding(5 .dp))
-                        Button(onClick = { pageState.value=0},
+                        Button(onClick = { navigateToSecondScreen()
+                                         pageState.value=0},
                             modifier = Modifier
                                 .offset(0.dp, 80.dp)
                                 .size(width = 220.dp, height = 50.dp),
