@@ -66,13 +66,15 @@ import androidx.core.graphics.rotationMatrix
 import java.util.ArrayList
 
 @Composable
-fun PreviewPage3(navigateToSecondScreen: () -> Unit) {
+fun PreviewPage3(navigateToFirstScreen: () -> Unit) {
     var painter1 = painterResource(id = R.drawable.redcircle)
     var list= mutableListOf<Int>(25)
     var list1=  mutableListOf<Int>(25)
     var list2= mutableListOf<Int>(25)
     var painter2= painterResource(id = R.drawable.bluecircle)
     var painter3= painterResource(id = R.drawable.appdec6)
+    var painter4= painterResource(id = R.drawable.reset)
+    var painter5= painterResource(id = R.drawable.exit)
     fun GridLogic(index: Int) {
         if ((GridVal[index] >3 && P1Cnt.value > 0)) {
             if (listOf(0, 4, 24, 20).contains(index)) {
@@ -252,7 +254,7 @@ fun PreviewPage3(navigateToSecondScreen: () -> Unit) {
     }
     Column {
         Button(
-            onClick = { },
+            onClick = { DialogBox1.value=true},
             modifier = Modifier
                 .offset(300.dp)
                 .padding(6.dp)
@@ -262,6 +264,92 @@ fun PreviewPage3(navigateToSecondScreen: () -> Unit) {
         ) {
             Text("X",textAlign=TextAlign.Center,
                 color = Color(161,184,205,255))
+        }
+        if(DialogBox1.value){
+            AlertDialog(onDismissRequest = { DialogBox1.value=false}, confirmButton = { /*TODO*/ },
+                containerColor = Color.Transparent
+            ,text={
+                Box(modifier = Modifier
+                    .size(height = 300.dp, width = 300.dp)
+                    .offset(20.dp, 0.dp)
+                    ){
+                    Button(onClick = {P1Cnt.value=-1
+                        P2Cnt.value=-1
+                        PageColor.value=0
+                        var list= mutableListOf<Int>(25)
+                        var list1= mutableListOf<Int>(25)
+                        var list2= mutableListOf<Int>(25)
+                        Turn.value=0
+                        for (i in 0..24){
+                            Grid[i]=0
+                            GridVal[i]=0
+                            Grid2[i]=-1
+                            Grid3[i]=-1
+                            ValColor[i]=-1
+                        }
+                    DialogBox1.value=false},
+                        colors =ButtonDefaults.buttonColors(containerColor = Color.Transparent),
+                        modifier = Modifier.offset(110.dp,-(30.dp))){
+
+                    }
+                    Image(painter = painter4, contentDescription = "reset",
+                        modifier= Modifier
+                            .size(60.dp)
+                            .offset(110.dp, -(30.dp)))
+                    Button(onClick={
+                        DialogBox2.value=true
+
+                    },
+                        colors = ButtonDefaults.buttonColors(containerColor = Color.Transparent),
+                        modifier=Modifier.offset(200.dp,-30.dp)){
+
+                    }
+                    Image(painter = painter5, contentDescription ="exit" ,
+                        modifier= Modifier
+                            .size(60.dp)
+                            .offset(200.dp, -30.dp))
+                }
+                }
+            )
+        }
+        if(DialogBox2.value){
+            DialogBox1.value=false
+            AlertDialog(onDismissRequest = { /*TODO*/ }, confirmButton = { /*TODO*/ }
+            , text = {
+                Text("Do you really want to exit ?")
+                    Row(){
+                        Button(onClick = {
+                            navigateToFirstScreen()
+                            DialogBox2.value=false
+                            player1Name.value=""
+                            player2Name.value=""
+                            P1Cnt.value=-1
+                            P2Cnt.value=-1
+                            PageColor.value=0
+                            var list= mutableListOf<Int>(25)
+                            var list1= mutableListOf<Int>(25)
+                            var list2= mutableListOf<Int>(25)
+                            Turn.value=0
+                            for (i in 0..24) {
+                                Grid[i] = 0
+                                GridVal[i] = 0
+                                Grid2[i] = -1
+                                Grid3[i] = -1
+                                ValColor[i] = -1
+                            }
+                        },
+                            modifier=Modifier
+                                .offset(0.dp,40.dp)){
+                            Text("Yes")
+                        }
+                        Spacer(modifier = Modifier.padding(4.dp))
+                        Button(onClick = { DialogBox2.value=false},
+                            modifier=Modifier
+                                .offset(0.dp,40.dp)){
+                            Text("No")
+                        }
+                    }
+                })
         }
         Row(
             modifier=Modifier.fillMaxWidth()
@@ -320,8 +408,7 @@ fun PreviewPage3(navigateToSecondScreen: () -> Unit) {
         LazyVerticalGrid(columns = GridCells.Fixed(5)) {
             items(25) { index ->
                 Box(
-                    contentAlignment = Alignment.Center,
-
+                    contentAlignment = Alignment.Center
                 ){
 
                     Button(
@@ -430,7 +517,7 @@ fun PreviewPage3(navigateToSecondScreen: () -> Unit) {
 
             border = BorderStroke(2.dp, Color(1,0,1,255)),
             modifier= Modifier
-                .offset(-200.dp, 0.dp)
+                .offset(-100.dp, 0.dp)
                 .wrapContentWidth()
 
 
@@ -469,8 +556,8 @@ fun PreviewPage3(navigateToSecondScreen: () -> Unit) {
     }
     if((P1Score.value==0 || P2Score.value==0 )&& P1Cnt.value>0){
             var name= if (P1Score.value==0) player2Name.value else player1Name.value
-            WinnerList.add(name)
-        AlertDialog(onDismissRequest = { DialogBox.value=false }, confirmButton = { /*TODO*/ },
+
+        AlertDialog(onDismissRequest = {}, confirmButton = { /*TODO*/ },
             containerColor =  Color(60,64,117,255),
             modifier = Modifier.size(height=350.dp,width=250.dp),
             iconContentColor =Color(193,232,250,255),
@@ -530,8 +617,22 @@ fun PreviewPage3(navigateToSecondScreen: () -> Unit) {
                         }
                         Spacer(modifier =Modifier
                             .padding(5 .dp))
-                        Button(onClick = { navigateToSecondScreen()
-                                         pageState.value=0},
+                        Button(onClick = { navigateToFirstScreen()
+                            P1Cnt.value=-1
+                            P2Cnt.value=-1
+                            PageColor.value=0
+                            var list= mutableListOf<Int>(25)
+                            var list1= mutableListOf<Int>(25)
+                            var list2= mutableListOf<Int>(25)
+                            Turn.value=0
+                            for (i in 0..24){
+                                Grid[i]=0
+                                GridVal[i]=0
+                                Grid2[i]=-1
+                                Grid3[i]=-1
+                                ValColor[i]=-1
+                            }
+                                            },
                             modifier = Modifier
                                 .offset(0.dp, 80.dp)
                                 .size(width = 220.dp, height = 50.dp),
