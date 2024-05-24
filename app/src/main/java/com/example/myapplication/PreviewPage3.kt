@@ -39,6 +39,7 @@ import androidx.compose.material3.ButtonColors
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
+import androidx.compose.material3.Icon
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -66,11 +67,12 @@ import java.util.ArrayList
 
 @Composable
 fun PreviewPage3(navigateToSecondScreen: () -> Unit) {
-    var painter = painterResource(id = R.drawable.appdev3)
+    var painter1 = painterResource(id = R.drawable.redcircle)
     var list= mutableListOf<Int>(25)
     var list1=  mutableListOf<Int>(25)
     var list2= mutableListOf<Int>(25)
-    var painter1= painterResource(id = R.drawable.appdec6)
+    var painter2= painterResource(id = R.drawable.bluecircle)
+    var painter3= painterResource(id = R.drawable.appdec6)
     fun GridLogic(index: Int) {
         if ((GridVal[index] >3 && P1Cnt.value > 0)) {
             if (listOf(0, 4, 24, 20).contains(index)) {
@@ -250,7 +252,7 @@ fun PreviewPage3(navigateToSecondScreen: () -> Unit) {
     }
     Column {
         Button(
-            onClick = { /*TODO*/ },
+            onClick = { },
             modifier = Modifier
                 .offset(300.dp)
                 .padding(6.dp)
@@ -317,12 +319,17 @@ fun PreviewPage3(navigateToSecondScreen: () -> Unit) {
     ) {
         LazyVerticalGrid(columns = GridCells.Fixed(5)) {
             items(25) { index ->
-                Button(
+                Box(
+                    contentAlignment = Alignment.Center,
+
+                ){
+
+                    Button(
                         shape = RoundedCornerShape(10),
 
                         onClick = {
 
-                            if(Grid[index]==1 && (P1Cnt.value>=0 && GridVal[index]!=0 )){
+                            if(Grid[index]==1 && (P1Cnt.value>=0 && GridVal[index]!=0 )&&!(index in list1)){
                                 list.add(index)
                             }
                             if (Grid3[index]==0 && Grid[index]==1){
@@ -331,8 +338,8 @@ fun PreviewPage3(navigateToSecondScreen: () -> Unit) {
                             else if(Grid3[index]==1 && Grid[index]==1 ){
                                 list2.add(index)
                             }
-                            if ( (index in list || P1Cnt.value==-1|| P2Cnt.value==-1)) {
-                               if (((Turn.value == 0 && index in list1)|| P1Cnt.value==-1) ||( (Turn.value == 1 && index in list2)|| P2Cnt.value==-1)) {
+                            if ((index in list || P1Cnt.value==-1|| P2Cnt.value==-1)) {
+                                if (((Turn.value == 0 && index in list1)|| P1Cnt.value==-1) ||(P2Cnt.value==-1 && !(index in list1)||(Turn.value==1 && index in list2)) ) {
                                     PageColor.value = if (PageColor.value == 0) 1 else 0
                                     Grid[index] = 1
                                     ValColor[index] = if (PageColor.value == 0) 1 else 0
@@ -366,44 +373,45 @@ fun PreviewPage3(navigateToSecondScreen: () -> Unit) {
                                 }
                             }
 
-                                  },
-                    modifier = Modifier
-                        .padding(5.dp)
-                        .aspectRatio(1f)
-                        .clip(RoundedCornerShape(16.dp))
-                        .shadow(elevation = 200.dp),
-                    colors = ButtonDefaults.buttonColors(containerColor = Color(244, 228, 206, 255))
+                        },
+                        modifier = Modifier
+                            .padding(5.dp)
+                            .aspectRatio(1f)
+                            .clip(RoundedCornerShape(16.dp))
+                            .shadow(elevation = 200.dp),
+                        colors = ButtonDefaults.buttonColors(containerColor = Color(244, 228, 206, 255))
 
-                ) {
-                    GamePoint()
+                    ) {
+                        GamePoint()
+                        GridLogic(index)
+                    }
+
                     if(Grid[index]==1 && ValColor[index]==0 && Grid3[index]==0 ){
                         if (GridVal[index]!=0){
-                            Box(modifier = Modifier.size(height = 150.dp, width = 150.dp)
-                                .fillMaxWidth(),
-                                contentAlignment = Alignment.Center){
-                                Image(painter = painter, contentDescription = "icon")
-                                Text(
-                                    GridVal[index].toString(),
-                                    color=Color(255, 94, 86, 255))
-                            }
-
-                            }
+                            Image(painter = painter1, contentDescription = "redcircle",
+                                modifier = Modifier.size(60.dp),
+                            )
+                            Text(
+                                GridVal[index].toString(),
+                                color=Color.White,
+                                fontSize = 24.sp)
+                        }
 
                     }
                     else if(Grid[index]==1 && ValColor[index]==1 && Grid3[index]==1
-                        ) {
+                    ) {
                         if (GridVal[index] != 0) {
+                            Image(painter = painter2, contentDescription = "bluecircle",
+                                modifier = Modifier.size(50.dp))
                             Text(
                                 GridVal[index].toString(),
-                                color = Color(47, 183, 241, 255)
+                                fontSize = 24.sp,
+                                color = Color.White
                             )
                         }
                     }
-
-                    GridLogic(index)
-
-
                 }
+
             }
         }
     }
@@ -485,7 +493,7 @@ fun PreviewPage3(navigateToSecondScreen: () -> Unit) {
                             textAlign = TextAlign.Center
                         )
                     }
-                    Image(painter=painter1,
+                    Image(painter=painter3,
                         contentDescription = "i",
                         modifier = Modifier
                             .size(50.dp)
