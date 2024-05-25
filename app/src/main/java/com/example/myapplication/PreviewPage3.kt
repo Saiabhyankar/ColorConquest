@@ -75,11 +75,28 @@ fun PreviewPage3(navigateToFirstScreen: () -> Unit) {
     var painter3= painterResource(id = R.drawable.appdec6)
     var painter4= painterResource(id = R.drawable.reset)
     var painter5= painterResource(id = R.drawable.exit)
+    var list3= mutableListOf<Int>(tile.value-1)
+    var Tot=0
+    var flag=false
+    for (i in 1..tile.value-1){
+        list3.add(i)
+    }
+    var list4= mutableListOf<Int>(tile.value-1)
+    for (i in (2*tile.value)-1..(((tile.value-1)*(tile.value))-1) step tile.value){
+        list4.add(i)
+    }
+    var list5= mutableListOf<Int>(tile.value-1)
+    for (i in tile.value..tile.value*(tile.value-2) step tile.value){
+        list5.add(i)
+    }
+    var list6= mutableListOf<Int>(tile.value-1)
+    for (i in (((tile.value-1)*(tile.value))+1)..(((tile.value-1)*(tile.value))+tile.value-2) ){
+        list6.add(i)
+    }
     fun GridLogic(index: Int) {
         if ((GridVal[index] >3 && P1Cnt.value > 0)) {
-            if (listOf(0, 4, 24, 20).contains(index)) {
+            if (listOf(0, tile.value-1, tile.value*tile.value -1, tile.value*tile.value-tile.value).contains(index)) {
 
-                if (GridVal[index] > 3 && P1Cnt.value > 0) {
 
 
                     if (index == 0) {
@@ -87,150 +104,157 @@ fun PreviewPage3(navigateToFirstScreen: () -> Unit) {
 
                         GridVal[index + 1] += 1
                         Grid[index+1]=1
-                        GridVal[index + 5] += 1
-                        Grid[index+5]=1
+                        GridVal[index + tile.value] += 1
+                        Grid[index+tile.value]=1
                         ValColor[index+1]=ValColor[index]
-                        ValColor[index+5]=ValColor[index]
+                        ValColor[index+tile.value]=ValColor[index]
                         Grid3[index+1]=Grid3[index]
-                        Grid3[index+5]=Grid3[index]
+                        Grid3[index+tile.value]=Grid3[index]
 
 
                     }
-                    else if (index == 4) {
+                    else if (index == tile.value-1) {
                         GridVal[index] = 0
 
                         GridVal[index - 1] += 1
                         Grid[index-1]=1
-                        GridVal[index + 5] += 1
-                        Grid[index+5]=1
+                        GridVal[index + tile.value] += 1
+                        Grid[index+tile.value]=1
                         ValColor[index-1]= ValColor[index]
-                        ValColor[index+5]=ValColor[index]
+                        ValColor[index+tile.value]=ValColor[index]
                         Grid3[index-1]=Grid3[index]
-                        Grid3[index+5]=Grid3[index]
+                        Grid3[index+tile.value]=Grid3[index]
 
 
                     }
-                    else if (index == 20) {
+                    else if (index == tile.value*tile.value-tile.value) {
                         GridVal[index] = 0
 
                         GridVal[index + 1] += 1
                         Grid[index+1]=1
-                        GridVal[index - 5] += 1
-                        Grid[index-5]=1
+                        GridVal[index - tile.value] += 1
+                        Grid[index-tile.value]=1
                         ValColor[index+1]= ValColor[index]
-                        ValColor[index-5]= ValColor[index]
+                        ValColor[index-tile.value]= ValColor[index]
                         Grid3[index+1]=Grid3[index]
-                        Grid3[index-5]=Grid3[index]
+                        Grid3[index-tile.value]=Grid3[index]
 
                     }
                     else {
                         GridVal[index] = 0
-
                         GridVal[index - 1] += 1
                         Grid[index-1]=1
-                        GridVal[index - 5] += 1
-                        Grid[index-5]=1
+
+                        GridVal[index - tile.value] += 1
+                        Grid[index-tile.value]=1
+
+
                         ValColor[index-1]=ValColor[index]
-                        ValColor[index-5]= ValColor[index]
+                        ValColor[index-tile.value]= ValColor[index]
+
                         Grid3[index-1]=Grid3[index]
-                        Grid3[index-5]=Grid3[index]
+                        Grid3[index-tile.value]=Grid3[index]
                     }
 
                 }
 
-            } else if (listOf(1, 2, 3, 5, 10, 15, 21, 22, 23, 9, 14, 19).contains(index)) {
-                if (listOf(1, 2, 3).contains(index)) {
-                    GridVal[index] = 0
-
-                    GridVal[index + 1] += 1
-                    Grid[index+1]=1
-                    GridVal[index - 1] += 1
-                    Grid[index-1]=1
-                    GridVal[index + 5] += 1
-                    Grid[index+5]=1
-                    ValColor[index+1]= ValColor[index]
-                    ValColor[index-1]= ValColor[index]
-                    ValColor[index+5]= ValColor[index]
-                    Grid3[index+1]=Grid3[index]
-                    Grid3[index+5]=Grid3[index]
-                    Grid3[index-1]=Grid3[index]
-
-
-                } else if (listOf(5, 10, 15).contains(index)) {
-                    GridVal[index] = 0
-
-                    GridVal[index + 1] += 1
-                    GridVal[index - 5] += 1
-                    GridVal[index + 5] += 1
-                    Grid[index + 1] = 1
-                    Grid[index - 5] = 1
-                    Grid[index + 5] = 1
-                    ValColor[index+1]= ValColor[index]
-                    ValColor[index-5]= ValColor[index]
-                    ValColor[index+5]= ValColor[index]
-                    Grid3[index+1]=Grid3[index]
-                    Grid3[index+5]=Grid3[index]
-                    Grid3[index-5]=Grid3[index]
-                } else if (listOf(21, 22, 23).contains(index)) {
-                    GridVal[index] = 0
-
-                    GridVal[index - 1] += 1
-                    GridVal[index - 5] += 1
-                    GridVal[index + 1] += 1
-                    Grid[index - 1] = 1
-                    Grid[index - 5] = 1
-                    Grid[index + 1] = 1
-                    ValColor[index+1]= ValColor[index]
-                    ValColor[index-1]= ValColor[index]
-                    ValColor[index-5]= ValColor[index]
-                    Grid3[index+1]=Grid3[index]
-                    Grid3[index-5]=Grid3[index]
-                    Grid3[index-1]=Grid3[index]
-                } else {
-                    GridVal[index] = 0
-
-                    GridVal[index - 1] += 1
-                    GridVal[index - 5] += 1
-                    GridVal[index + 5] += 1
-                    Grid[index - 1] = 1
-                    Grid[index - 5] = 1
-                    Grid[index + 5] = 1
-                    ValColor[index-1]= ValColor[index]
-                    ValColor[index-5]= ValColor[index]
-                    ValColor[index+5]= ValColor[index]
-                    Grid3[index-1]=Grid3[index]
-                    Grid3[index+5]=Grid3[index]
-                    Grid3[index-5]=Grid3[index]
-                }
-            } else {
+             else if (list3.contains(index)) {
                 GridVal[index] = 0
 
-                GridVal[index + 5] += 1
                 GridVal[index + 1] += 1
-                GridVal[index - 5] += 1
+                Grid[index+1]=1
                 GridVal[index - 1] += 1
-                Grid[index + 5] = 1
-                Grid[index + 1] = 1
-                Grid[index - 5] = 1
-                Grid[index - 1] = 1
+                Grid[index-1]=1
+                GridVal[index + tile.value] += 1
+                Grid[index+tile.value]=1
                 ValColor[index+1]= ValColor[index]
                 ValColor[index-1]= ValColor[index]
-                ValColor[index+5]= ValColor[index]
-                ValColor[index-5]=ValColor[index]
+                ValColor[index+tile.value]= ValColor[index]
+                Grid3[index+tile.value]=Grid3[index]
                 Grid3[index+1]=Grid3[index]
-                Grid3[index+5]=Grid3[index]
-                Grid3[index-1]=Grid3[index]
+                Grid3[index-1]=Grid3[index]}
 
-                Grid3[index-5]=Grid3[index]
+            else if (list5.contains(index)) {
+                GridVal[index] = 0
 
+                GridVal[index + 1] += 1
+                GridVal[index - tile.value] += 1
+                GridVal[index + tile.value] += 1
+                Grid[index + 1] = 1
+                Grid[index - tile.value] = 1
+                Grid[index + tile.value] = 1
+                ValColor[index+1]= ValColor[index]
+                ValColor[index-tile.value]= ValColor[index]
+                ValColor[index+tile.value]= ValColor[index]
+                Grid3[index+1]=Grid3[index]
+                Grid3[index+tile.value]=Grid3[index]
+                Grid3[index-tile.value]=Grid3[index]
             }
-        }
+            else if (list6.contains(index)) {
+                GridVal[index] = 0
 
+                GridVal[index - 1] += 1
+                GridVal[index - tile.value] += 1
+                GridVal[index + 1] += 1
+                Grid[index - 1] = 1
+                Grid[index - tile.value] = 1
+                Grid[index + 1] = 1
+                ValColor[index+1]= ValColor[index]
+                ValColor[index-1]= ValColor[index]
+                ValColor[index-tile.value]= ValColor[index]
+                Grid3[index+1]=Grid3[index]
+                Grid3[index-tile.value]=Grid3[index]
+                Grid3[index-1]=Grid3[index]
+            }
+            else if(list4.contains(index)) {
+                GridVal[index] = 0
+
+                GridVal[index - 1] += 1
+                GridVal[index - tile.value] += 1
+                GridVal[index + tile.value] += 1
+                Grid[index - 1] = 1
+                Grid[index - tile.value] = 1
+                Grid[index + tile.value] = 1
+                ValColor[index-1]= ValColor[index]
+                ValColor[index- tile.value]= ValColor[index]
+                ValColor[index+ tile.value]= ValColor[index]
+                Grid3[index-1]=Grid3[index]
+                Grid3[index+ tile.value]=Grid3[index]
+                Grid3[index- tile.value]=Grid3[index]
+            }
+
+        else {
+            GridVal[index] = 0
+
+            GridVal[index + tile.value] += 1
+            GridVal[index + 1] += 1
+            GridVal[index - tile.value] += 1
+            GridVal[index - 1] += 1
+            Grid[index + tile.value] = 1
+            Grid[index + 1] = 1
+            Grid[index - tile.value] = 1
+            Grid[index - 1] = 1
+            ValColor[index+1]= ValColor[index]
+            ValColor[index-1]= ValColor[index]
+            ValColor[index+ tile.value]= ValColor[index]
+            ValColor[index-tile.value]=ValColor[index]
+            Grid3[index+1]=Grid3[index]
+            Grid3[index+tile.value]=Grid3[index]
+            Grid3[index-1]=Grid3[index]
+            Grid3[index-tile.value]=Grid3[index]
+
+        }
     }
+
+}
+
+
+
+
     fun GamePoint(){
         P1Score.value=0
         P2Score.value=0
-        for (i in 0 .. 24){
+        for (i in 0 .. ((tile.value)*(tile.value)-1)){
 
             if(ValColor[i]==0){
              P1Score.value+=GridVal[i]}
@@ -276,16 +300,19 @@ fun PreviewPage3(navigateToFirstScreen: () -> Unit) {
                     Button(onClick = {P1Cnt.value=-1
                         P2Cnt.value=-1
                         PageColor.value=0
-                        var list= mutableListOf<Int>(25)
-                        var list1= mutableListOf<Int>(25)
-                        var list2= mutableListOf<Int>(25)
+                        var list= mutableListOf<Int>(tile.value*tile.value)
+                        var list1= mutableListOf<Int>(tile.value*tile.value)
+                        var list2= mutableListOf<Int>(tile.value*tile.value)
                         Turn.value=0
-                        for (i in 0..24){
-                            Grid[i]=0
-                            GridVal[i]=0
-                            Grid2[i]=-1
-                            Grid3[i]=-1
-                            ValColor[i]=-1
+                        P2Win=0
+                        P1Win=0
+                        Tot=0
+                        for (i in 0..((tile.value)*(tile.value-1))){
+                            Grid[i] = 0
+                            GridVal[i] = 0
+                            Grid2[i] = -1
+                            Grid3[i] = -1
+                            ValColor[i] = -1
                         }
                     DialogBox1.value=false},
                         colors =ButtonDefaults.buttonColors(containerColor = Color.Transparent),
@@ -326,11 +353,14 @@ fun PreviewPage3(navigateToFirstScreen: () -> Unit) {
                             P1Cnt.value=-1
                             P2Cnt.value=-1
                             PageColor.value=0
-                            var list= mutableListOf<Int>(25)
-                            var list1= mutableListOf<Int>(25)
-                            var list2= mutableListOf<Int>(25)
+                            P2Win=0
+                            P1Win=0
+                            Tot=0
+                            var list= mutableListOf<Int>(tile.value*tile.value)
+                            var list1= mutableListOf<Int>(tile.value*tile.value)
+                            var list2= mutableListOf<Int>(tile.value*tile.value)
                             Turn.value=0
-                            for (i in 0..24) {
+                            for (i in 0..((tile.value)*(tile.value-1))){
                                 Grid[i] = 0
                                 GridVal[i] = 0
                                 Grid2[i] = -1
@@ -374,10 +404,7 @@ fun PreviewPage3(navigateToFirstScreen: () -> Unit) {
                     fontSize = 24.sp,
 
                 )
-
-
             }
-
             Card(
                 shape = CutCornerShape(45.dp, 5.dp, 5.dp, 45.dp),
                 colors = CardDefaults.cardColors(containerColor = Color(46,50,58,255)),
@@ -402,11 +429,11 @@ fun PreviewPage3(navigateToFirstScreen: () -> Unit) {
         contentAlignment = Alignment.Center,
         modifier = Modifier
             .fillMaxWidth()
-            .padding(25.dp)
+            .padding(24.dp)
             .size(height = 300.dp, width = 350.dp)
     ) {
-        LazyVerticalGrid(columns = GridCells.Fixed(5)) {
-            items(25) { index ->
+        LazyVerticalGrid(columns = GridCells.Fixed(tile.value)) {
+            items(tile.value*tile.value) { index ->
                 Box(
                     contentAlignment = Alignment.Center
                 ){
@@ -555,99 +582,145 @@ fun PreviewPage3(navigateToFirstScreen: () -> Unit) {
 
     }
     if((P1Score.value==0 || P2Score.value==0 )&& P1Cnt.value>0){
-            var name= if (P1Score.value==0) player2Name.value else player1Name.value
+             name= if (P1Score.value==0) player2Name.value else player1Name.value
+             wScore=if(P1Score.value==0) P2Score.value else P1Score.value
+              if(P1Score.value==0) {
+                  P2Win+=1
+              }
+              else if(P2Score.value==0){
+                  P1Win+=1
+              }
+        Tot=P1Win+P2Win
+        if((Tot>= matchNumber.value)||(P1Win== (matchNumber.value/2)+1)||(P2Win==(matchNumber.value)/2+1)){
+             flag=true
+        }
+        else{
+              flag=false
+        }
+       if(flag){
 
-        AlertDialog(onDismissRequest = {}, confirmButton = { /*TODO*/ },
-            containerColor =  Color(60,64,117,255),
-            modifier = Modifier.size(height=350.dp,width=250.dp),
-            iconContentColor =Color(193,232,250,255),
-            text={
-                Column (
-                ){
-                    Card (
-                        shape = RoundedCornerShape(20.dp),
-                        colors = CardDefaults.cardColors(containerColor = Color(255,255,255,255)),
-                        modifier=Modifier
-                        .size(width = 220.dp, height = 50.dp),
+                AlertDialog(onDismissRequest = {
 
+                }, confirmButton = { /*TODO*/ },
+                containerColor =  Color(60,64,117,255),
+                modifier = Modifier.size(height=350.dp,width=250.dp),
+                iconContentColor =Color(193,232,250,255),
+                text={
+                    Column (
                     ){
-                        Text(name.toUpperCase(),
-                            color = Color.Black,
+                        Card (
+                            shape = RoundedCornerShape(20.dp),
+                            colors = CardDefaults.cardColors(containerColor = Color(255,255,255,255)),
                             modifier=Modifier
-                                .offset(15.dp,5.dp),
-                            fontWeight = FontWeight.ExtraBold,
-                            fontSize = 20.sp,
-                            textAlign = TextAlign.Center
-                        )
-                    }
-                    Image(painter=painter3,
-                        contentDescription = "i",
-                        modifier = Modifier
-                            .size(50.dp)
-                            .offset(75.dp, 40.dp)
-
-                    )
-                    Text("WINS !!",
-                        fontSize = 24.sp,
-                        fontWeight = FontWeight.ExtraBold,
-                        modifier = Modifier
-                            .offset(60.dp,60.dp))
-                    Column {
-
-                        Button(onClick = {  P1Cnt.value=-1
-                                            P2Cnt.value=-1
-                                            PageColor.value=0
-                                            var list= mutableListOf<Int>(25)
-                                            var list1= mutableListOf<Int>(25)
-                                            var list2= mutableListOf<Int>(25)
-                                            Turn.value=0
-                                         for (i in 0..24){
-                                             Grid[i]=0
-                                             GridVal[i]=0
-                                             Grid2[i]=-1
-                                             Grid3[i]=-1
-                                             ValColor[i]=-1
-                                         }},
-                            modifier = Modifier
-                                .offset(0.dp, 80.dp)
-                                .size(width = 220.dp, height = 50.dp)){
-                           Text("Play Again",
-                                color=Color.White,
-                                fontSize = 24.sp)
-                        }
-                        Spacer(modifier =Modifier
-                            .padding(5 .dp))
-                        Button(onClick = { navigateToFirstScreen()
-                            P1Cnt.value=-1
-                            P2Cnt.value=-1
-                            PageColor.value=0
-                            var list= mutableListOf<Int>(25)
-                            var list1= mutableListOf<Int>(25)
-                            var list2= mutableListOf<Int>(25)
-                            Turn.value=0
-                            for (i in 0..24){
-                                Grid[i]=0
-                                GridVal[i]=0
-                                Grid2[i]=-1
-                                Grid3[i]=-1
-                                ValColor[i]=-1
-                            }
-                                            },
-                            modifier = Modifier
-                                .offset(0.dp, 80.dp)
                                 .size(width = 220.dp, height = 50.dp),
-                            colors = ButtonDefaults.buttonColors(containerColor = Color(254,95,86,255))){
-                            Text("Home",
-                                fontSize = 24.sp,
-                                color = Color.White)
-                        }
-                    }
 
+                            ){
+                            Text(name.toUpperCase(),
+                                color = Color.Black,
+                                modifier=Modifier
+                                    .offset(15.dp,5.dp),
+                                fontWeight = FontWeight.ExtraBold,
+                                fontSize = 20.sp,
+                                textAlign = TextAlign.Center
+                            )
+                        }
+                        Image(painter=painter3,
+                            contentDescription = "i",
+                            modifier = Modifier
+                                .size(50.dp)
+                                .offset(75.dp, 40.dp)
+
+                        )
+                        Text("WINS !!",
+                            fontSize = 24.sp,
+                            fontWeight = FontWeight.ExtraBold,
+                            modifier = Modifier
+                                .offset(60.dp,60.dp))
+                        Column {
+
+                            Button(onClick = {  P1Cnt.value=-1
+                                P2Cnt.value=-1
+                                PageColor.value=0
+                                var list= mutableListOf<Int>(tile.value*tile.value)
+                                var list1= mutableListOf<Int>(tile.value*tile.value)
+                                var list2= mutableListOf<Int>(tile.value*tile.value)
+                                Turn.value=0
+                                P2Win=0
+                                P1Win=0
+                                Tot=0
+                                for (i in 0..tile.value*tile.value-1){
+                                    Grid[i]=0
+                                    GridVal[i]=0
+                                    Grid2[i]=-1
+                                    Grid3[i]=-1
+                                    ValColor[i]=-1
+                                }},
+                                modifier = Modifier
+                                    .offset(0.dp, 80.dp)
+                                    .size(width = 220.dp, height = 50.dp)){
+                                Text("Play Again",
+                                    color=Color.White,
+                                    fontSize = 24.sp)
+                            }
+                            Spacer(modifier =Modifier
+                                .padding(5 .dp))
+                            Button(onClick = { navigateToFirstScreen()
+                                P1Cnt.value=-1
+                                P2Cnt.value=-1
+                                PageColor.value=0
+                                var list= mutableListOf<Int>(tile.value*tile.value)
+                                var list1= mutableListOf<Int>(tile.value*tile.value)
+                                var list2= mutableListOf<Int>(tile.value*tile.value)
+                                Turn.value=0
+                                P2Win=0
+                                P1Win=0
+                                Tot=0
+                                for (i in 0..tile.value*tile.value-1){
+                                    Grid[i]=0
+                                    GridVal[i]=0
+                                    Grid2[i]=-1
+                                    Grid3[i]=-1
+                                    ValColor[i]=-1
+                                }
+                            },
+                                modifier = Modifier
+                                    .offset(0.dp, 80.dp)
+                                    .size(width = 220.dp, height = 50.dp),
+                                colors = ButtonDefaults.buttonColors(containerColor = Color(254,95,86,255))){
+                                Text("Home",
+                                    fontSize = 24.sp,
+                                    color = Color.White)
+                            }
+                        }
+
+                    }
                 }
+            )
+
+        }
+        else if(Tot< matchNumber.value){
+
+            P1Cnt.value=-1
+            P2Cnt.value=-1
+            PageColor.value=0
+            var list= mutableListOf<Int>(tile.value*tile.value)
+            var list1= mutableListOf<Int>(tile.value*tile.value)
+            var list2= mutableListOf<Int>(tile.value*tile.value)
+            Turn.value=0
+            for (i in 0..tile.value*tile.value-1){
+                Grid[i]=0
+                GridVal[i]=0
+                Grid2[i]=-1
+                Grid3[i]=-1
+                ValColor[i]=-1
             }
-        )
+        }
+
+        }
+
+
     }
-}
+
 
 
 

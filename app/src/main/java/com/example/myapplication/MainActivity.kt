@@ -2,7 +2,9 @@ package com.example.myapplication
 
 
 import android.app.Dialog
+import android.content.Context
 import android.os.Bundle
+import android.provider.Settings.Global.putString
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.foundation.layout.fillMaxSize
@@ -36,7 +38,13 @@ var P2Cnt= mutableIntStateOf(-1)
 var Turn = mutableIntStateOf(0)
 var DialogBox1= mutableStateOf(false)
 var DialogBox2= mutableStateOf(false)
-var DialogBox3= mutableStateOf(false)
+var name=""
+var wScore=0
+var tile= mutableIntStateOf(5)
+var gameMode= mutableIntStateOf(0)
+var matchNumber= mutableIntStateOf(1)
+var P1Win= 0
+var P2Win= 0
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -59,16 +67,19 @@ class MainActivity : ComponentActivity() {
                                 navController.navigate(("thirdscreen"))
                             }
                         }
-                        composable("thirdscreen") {
+                        composable("fourthscreen") {
                             PreviewPage3 {
                                 navController.navigate("firstscreen")
+                            }
+                        }
+                        composable("thirdscreen") {
+                            GameMode {
+                                navController.navigate("fourthscreen")
                             }
                         }
                     }
 
                 }
-
-
             }
         }
     }

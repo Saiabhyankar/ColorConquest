@@ -64,6 +64,7 @@ fun PreviewPage2(navigateToThirdPage:()->Unit) {
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
         Row() {
+
             Card(
                 shape = CutCornerShape(20.dp, 20.dp, 20.dp, 20.dp),
                 border = BorderStroke(2.dp, Color(213, 186, 183, 255)),
@@ -192,7 +193,7 @@ fun PreviewPage2(navigateToThirdPage:()->Unit) {
         Image(
             painter = painter2, contentDescription = "Image",
             modifier = Modifier
-                           .size(height=350.dp,width=650.dp)
+                .size(height = 350.dp, width = 650.dp)
                 .offset(0.dp, 30.dp)
 
         )

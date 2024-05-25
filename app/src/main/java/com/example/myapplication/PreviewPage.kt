@@ -1,5 +1,9 @@
 package com.example.myapplication
 
+import android.content.Context
+import android.provider.Settings.Global.putInt
+import android.provider.Settings.Global.putString
+import android.view.Gravity.apply
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
@@ -47,6 +51,7 @@ import com.example.myapplication.ui.theme.fontFamily
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun PreviewPage(navigateToSecondPage:()->Unit){
+
     val gradient = Brush.verticalGradient(
         0.0f to Color(254,194,113,255),
         1.0f to Color(254,99,109,255),
