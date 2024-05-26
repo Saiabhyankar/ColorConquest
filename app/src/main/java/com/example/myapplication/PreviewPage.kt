@@ -1,9 +1,6 @@
 package com.example.myapplication
 
-import android.content.Context
-import android.provider.Settings.Global.putInt
-import android.provider.Settings.Global.putString
-import android.view.Gravity.apply
+
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
@@ -38,6 +35,7 @@ import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.TileMode
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.TextStyle
 
@@ -45,6 +43,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.example.myapplication.ui.theme.MyApplicationTheme
 import com.example.myapplication.ui.theme.fontFamily
 
 
@@ -62,8 +61,8 @@ fun PreviewPage(navigateToSecondPage:()->Unit){
     val painter= painterResource(id = R.drawable.image1)
     var showDialog by remember {
         mutableStateOf(false)
-
     }
+
     Column(
         modifier= Modifier.size(10.dp),
         horizontalAlignment = Alignment.CenterHorizontally

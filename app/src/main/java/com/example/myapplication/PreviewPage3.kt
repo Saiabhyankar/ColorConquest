@@ -1,13 +1,19 @@
 package com.example.myapplication
 
+import android.content.Context
 import android.graphics.drawable.Icon
+import android.provider.Settings.Global.putInt
+import android.provider.Settings.Global.putString
 import android.service.autofill.Validators.and
+import android.view.Gravity.apply
+import android.widget.Toast
 import androidx.activity.compose.setContent
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.interaction.MutableInteractionSource
+import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -56,6 +62,7 @@ import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.Color.Companion.White
 import androidx.compose.ui.input.pointer.pointerInput
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.semantics.Role.Companion.Button
 import androidx.compose.ui.text.font.FontWeight
@@ -67,17 +74,21 @@ import java.util.ArrayList
 
 @Composable
 fun PreviewPage3(navigateToFirstScreen: () -> Unit) {
+    var sizeR=85-(tile.value*tile.value)
+    var sizeB=75-(tile.value*tile.value)
     var painter1 = painterResource(id = R.drawable.redcircle)
     var list= mutableListOf<Int>(25)
     var list1=  mutableListOf<Int>(25)
     var list2= mutableListOf<Int>(25)
     var painter2= painterResource(id = R.drawable.bluecircle)
-    var painter3= painterResource(id = R.drawable.appdec6)
+    var painter3= painterResource(id = R.drawable.appdev6)
     var painter4= painterResource(id = R.drawable.reset)
     var painter5= painterResource(id = R.drawable.exit)
     var list3= mutableListOf<Int>(tile.value-1)
     var Tot=0
     var flag=false
+    var context= LocalContext.current
+    val context1 = LocalContext.current
     for (i in 1..tile.value-1){
         list3.add(i)
     }
@@ -96,9 +107,6 @@ fun PreviewPage3(navigateToFirstScreen: () -> Unit) {
     fun GridLogic(index: Int) {
         if ((GridVal[index] >3 && P1Cnt.value > 0)) {
             if (listOf(0, tile.value-1, tile.value*tile.value -1, tile.value*tile.value-tile.value).contains(index)) {
-
-
-
                     if (index == 0) {
                         GridVal[index] = 0
 
@@ -284,7 +292,7 @@ fun PreviewPage3(navigateToFirstScreen: () -> Unit) {
                 .padding(6.dp)
                 .height(50.dp)
                 .width(50.dp),
-            colors=ButtonDefaults.buttonColors(containerColor = Color(255,254,252,255))
+            colors=ButtonDefaults.buttonColors(containerColor = if(isDarkTheme.value) Color(255,254,252,255)else Color(9,17,3,255))
         ) {
             Text("X",textAlign=TextAlign.Center,
                 color = Color(161,184,205,255))
@@ -297,7 +305,8 @@ fun PreviewPage3(navigateToFirstScreen: () -> Unit) {
                     .size(height = 300.dp, width = 300.dp)
                     .offset(20.dp, 0.dp)
                     ){
-                    Button(onClick = {P1Cnt.value=-1
+                    Button(onClick = {
+                        P1Cnt.value=-1
                         P2Cnt.value=-1
                         PageColor.value=0
                         var list= mutableListOf<Int>(tile.value*tile.value)
@@ -307,7 +316,7 @@ fun PreviewPage3(navigateToFirstScreen: () -> Unit) {
                         P2Win=0
                         P1Win=0
                         Tot=0
-                        for (i in 0..((tile.value)*(tile.value-1))){
+                        for (i in 0..((tile.value)*(tile.value)-1)){
                             Grid[i] = 0
                             GridVal[i] = 0
                             Grid2[i] = -1
@@ -360,7 +369,7 @@ fun PreviewPage3(navigateToFirstScreen: () -> Unit) {
                             var list1= mutableListOf<Int>(tile.value*tile.value)
                             var list2= mutableListOf<Int>(tile.value*tile.value)
                             Turn.value=0
-                            for (i in 0..((tile.value)*(tile.value-1))){
+                            for (i in 0..((tile.value)*(tile.value)-1)){
                                 Grid[i] = 0
                                 GridVal[i] = 0
                                 Grid2[i] = -1
@@ -486,7 +495,10 @@ fun PreviewPage3(navigateToFirstScreen: () -> Unit) {
                                     }
                                 }
                             }
-
+                            if(!(index in list)&&((P1Cnt.value>0)||(P2Cnt.value==0))){
+                                Toast.makeText(context,"Invalid Option",
+                                    Toast.LENGTH_LONG).show()
+                            }
                         },
                         modifier = Modifier
                             .padding(5.dp)
@@ -499,11 +511,10 @@ fun PreviewPage3(navigateToFirstScreen: () -> Unit) {
                         GamePoint()
                         GridLogic(index)
                     }
-
                     if(Grid[index]==1 && ValColor[index]==0 && Grid3[index]==0 ){
                         if (GridVal[index]!=0){
                             Image(painter = painter1, contentDescription = "redcircle",
-                                modifier = Modifier.size(60.dp),
+                                modifier = Modifier.size(sizeR.dp),
                             )
                             Text(
                                 GridVal[index].toString(),
@@ -516,7 +527,7 @@ fun PreviewPage3(navigateToFirstScreen: () -> Unit) {
                     ) {
                         if (GridVal[index] != 0) {
                             Image(painter = painter2, contentDescription = "bluecircle",
-                                modifier = Modifier.size(50.dp))
+                                modifier = Modifier.size(sizeB.dp))
                             Text(
                                 GridVal[index].toString(),
                                 fontSize = 24.sp,
@@ -598,7 +609,8 @@ fun PreviewPage3(navigateToFirstScreen: () -> Unit) {
               flag=false
         }
        if(flag){
-
+                writeToSharedPref(context1,"Name",name)
+                writeToSharedPref(context1,"Score",wScore.toString())
                 AlertDialog(onDismissRequest = {
 
                 }, confirmButton = { /*TODO*/ },

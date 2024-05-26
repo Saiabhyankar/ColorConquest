@@ -111,8 +111,11 @@ fun GameMode(navigateToGamePage:()->Unit){
                             gameMode.value=0}){
                             Text("5*5")
                         }
-
-
+                        Spacer(modifier = Modifier
+                            .padding(6.dp))
+                        Button(onClick = {TimerMode.value=true}){
+                            Text("Timer Mode")
+                        }
                     }
 
 

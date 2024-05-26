@@ -19,6 +19,7 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.CutCornerShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.BasicTextField
+import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Card
@@ -38,6 +39,7 @@ import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.modifier.modifierLocalConsumer
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
@@ -49,6 +51,8 @@ import androidx.compose.ui.unit.sp
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun PreviewPage2(navigateToThirdPage:()->Unit) {
+    var context= LocalContext.current
+    var context1= LocalContext.current
     val gradient = Brush.verticalGradient(
         0.0f to Color(254,194,113,255),
         1.0f to Color(254,99,109,255),
@@ -60,6 +64,8 @@ fun PreviewPage2(navigateToThirdPage:()->Unit) {
     var painter2 = painterResource(id = R.drawable.image1)
     var painter3 = painterResource(id = R.drawable.appdev4)
     var painter4 = painterResource(id = R.drawable.appdev5)
+    val name=readFromSharedPreferences(context,"Name")
+    val Score= readFromSharedPreferences(context1,"Score")
     Column(
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
@@ -197,14 +203,13 @@ fun PreviewPage2(navigateToThirdPage:()->Unit) {
                 .offset(0.dp, 30.dp)
 
         )
-        Column(){
+        Column {
             Button(
-            onClick = { navigateToThirdPage()
-                      pageState.value=1},
+            onClick = { navigateToThirdPage()},
             colors = ButtonDefaults.buttonColors(containerColor = Color(46, 182, 241, 255)),
             modifier = Modifier
                 .size(width = 200.dp, height = 80.dp)
-                .offset(90.dp, 50.dp)
+                .offset(110.dp, -10.dp)
                 .shadow(25.dp, RoundedCornerShape(5.dp))
 
         ) {
@@ -214,6 +219,39 @@ fun PreviewPage2(navigateToThirdPage:()->Unit) {
                 textAlign = TextAlign.Center
             )
             }
+
+            Button(onClick = {showDetail.value=true},
+                modifier = Modifier
+                    .offset(130.dp,0.dp)
+                    .size(width = 150.dp, height = 60.dp)
+                    .shadow(25.dp, RoundedCornerShape(5.dp))) {
+                Text("Winner Detail")
+            }
+            if(showDetail.value){
+                AlertDialog(onDismissRequest = { showDetail.value=false}, confirmButton = { /*TODO*/ },
+                    text={
+                        Column(){
+                            Row {
+                                Text("Player Name",
+                                    fontSize = 16.sp,
+                                    textAlign = TextAlign.Right)
+                                Spacer(modifier = Modifier
+                                    .padding(16.dp))
+                                Text("Player Score",
+                                    fontSize = 16.sp,
+                                    textAlign = TextAlign.Center)
+                            }
+                            Row {
+                                Text(name,fontSize = 16.sp,
+                                    textAlign = TextAlign.Center)
+                                Spacer(modifier = Modifier
+                                    .padding(60 .dp))
+                                Text(Score,
+                                    fontSize = 16.sp,
+                                    textAlign = TextAlign.End)
+                            }
+                        }
+                    })}
         }
     }
 }
