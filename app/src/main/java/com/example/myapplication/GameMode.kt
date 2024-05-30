@@ -7,20 +7,28 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
+import androidx.compose.material3.LocalTextStyle
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextButton
+import androidx.compose.material3.TextField
+import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.input.pointer.PointerIcon.Companion.Text
+import androidx.compose.ui.input.pointer.motionEventSpy
+import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontFamily
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.myapplication.ui.theme.fontFamily
@@ -55,18 +63,23 @@ fun GameMode(navigateToGamePage:()->Unit){
         Button(onClick = {navigateToGamePage()
                          tile.value=5
                          matchNumber.value=1
+            hackerMode.value=0
+            TimerMode.value=false
                          },
-            //colors = ButtonDefaults.buttonColors(containerColor = Color())
+
 
             ){
             Text("Normal Mode")
         }
         Button(onClick = {
             gameMode.value=1
+            hackerMode.value=0
         }){
             Text("Hacker Mode")
         }
-        Button(onClick = {navigateToGamePage()}){
+        Button(onClick = {
+        hackerMode.value=1
+          tile. value=5}){
             Text("Hacker ++ Mode")
         }
         if(gameMode.value==1){
@@ -82,7 +95,8 @@ fun GameMode(navigateToGamePage:()->Unit){
                             Button(onClick = {
                                 matchNumber.value=-1
                                 tile.value=2
-                            gameMode.value=0}){
+                                gameMode.value=0
+                                TimerMode.value=false}){
                                 Text("2*2")
                             }
                             Spacer(modifier = Modifier
@@ -90,7 +104,8 @@ fun GameMode(navigateToGamePage:()->Unit){
                             Button(onClick = {
                                 matchNumber.value=-1
                                 tile.value=3
-                                gameMode.value=0}){
+                                gameMode.value=0
+                                TimerMode.value=false}){
                                 Text("3*3")
                             }
                             Spacer(modifier = Modifier
@@ -98,7 +113,8 @@ fun GameMode(navigateToGamePage:()->Unit){
                             Button(onClick = {
                                 matchNumber.value=-1
                                 tile.value=4
-                                gameMode.value=0}){
+                                gameMode.value=0
+                                TimerMode.value=false}){
                                 Text("4*4")
                             }
 
@@ -108,12 +124,15 @@ fun GameMode(navigateToGamePage:()->Unit){
                         Button(onClick = {
                             matchNumber.value=-1
                             tile.value=5
-                            gameMode.value=0}){
+                            gameMode.value=0
+                            TimerMode.value=false}){
                             Text("5*5")
                         }
                         Spacer(modifier = Modifier
                             .padding(6.dp))
-                        Button(onClick = {TimerMode.value=true}){
+                        Button(onClick = {TimerMode.value=true
+                            //navigateToGamePage()
+                            matchNumber.value=-1}){
                             Text("Timer Mode")
                         }
                     }
@@ -152,6 +171,148 @@ fun GameMode(navigateToGamePage:()->Unit){
                     }
 
                 })
+        }
+        if(hackerMode.value==1){
+            AlertDialog(onDismissRequest = { hackerMode.value=0}, confirmButton = { /*TODO*/ },
+                modifier =Modifier.size(height=300.dp,width=300.dp),
+                text={
+                    Column{
+                        Button(onClick = {
+                            hackerMode.value=1
+                            navigateToGamePage()}){
+                            Text("VS Computer")
+                        }
+                        Button(onClick = { hackerMode.value=2
+                        Multi.value=1}){
+                            Text("Multiplayer Mode")
+                        }
+                    }
+
+                })
+        }
+        if(Multi.value==1){
+            AlertDialog(onDismissRequest = { Multi.value=0 }, confirmButton = { /*TODO*/ },
+                text={
+                    Column(){
+                        Text("Choose Number Of Players")
+                        Button(onClick = {
+                            playerNum.value=2
+                            Multi.value=0
+                            nameMulti.value=1
+                            }){
+                            Text("2")
+                        }
+                        Button(onClick = {
+                            playerNum.value=3
+                            Multi.value=0
+                            nameMulti.value=1
+                            }){
+                            Text("3")
+                        }
+                        Button(onClick = {
+                            Multi.value=0
+                            playerNum.value=4
+                            nameMulti.value=1}){
+                            Text("4")
+                        }
+                    }
+                })
+        }
+        if (nameMulti.value == 1) {
+            AlertDialog(
+                onDismissRequest = { nameMulti.value = 0 },
+                modifier = Modifier.size(500.dp),
+                confirmButton = {
+                    Button(onClick = { nameMulti.value = 0
+                    navigateToGamePage()}) {
+                        Text("OK")
+                    }
+                },
+                text = {
+                    Column{
+                        TextField(
+                            value = player1Name.value,
+                            onValueChange = { player1Name.value = it },
+                            textStyle = TextStyle(
+                                color = Color(254, 95, 86, 255)
+                            ),
+                            modifier = Modifier
+                                .fillMaxWidth(),
+                            label = {
+
+                                Text(
+                                    "Enter Player-1 Name",
+                                    fontSize = 8.sp,
+                                    color = Color(94, 107, 147, 255),
+                                    fontWeight = FontWeight.ExtraBold
+                                )
+                            }
+                        )
+                        Spacer(modifier=Modifier
+                            .padding(16.dp))
+                        TextField(
+                            value = player2Name.value,
+                            onValueChange = { player2Name.value = it },
+                            textStyle = TextStyle(
+                                color = Color(254, 95, 86, 255)
+                            ),
+                            modifier = Modifier
+                                .fillMaxWidth(),
+                            label = {
+                                Text(
+                                    "Enter Player-2 Name",
+                                    fontSize = 8.sp,
+                                    color = Color(94, 107, 147, 255),
+                                    fontWeight = FontWeight.ExtraBold
+                                )
+                            }
+                        )
+                        Spacer(modifier=Modifier
+                            .padding(16.dp))
+                        if(playerNum.value>=3) {
+                            TextField(
+                                value = player3Name.value,
+                                onValueChange = { player3Name.value = it },
+                                textStyle = TextStyle(
+                                    color = Color(254, 95, 86, 255)
+                                ),
+                                modifier = Modifier
+                                    .fillMaxWidth(),
+                                label = {
+                                    Text(
+                                        "Enter Player-3 Name",
+                                        fontSize = 8.sp,
+                                        color = Color(94, 107, 147, 255),
+                                        fontWeight = FontWeight.ExtraBold
+                                    )
+                                }
+                            )
+                        }
+                            Spacer(modifier=Modifier
+                                .padding(16.dp))
+                        if(playerNum.value==4) {
+                            TextField(
+                                value = player4Name.value,
+                                onValueChange = { player4Name.value = it },
+                                textStyle = TextStyle(
+                                    color = Color(254, 95, 86, 255)
+                                ),
+                                modifier = Modifier
+                                    .fillMaxWidth(),
+                                label = {
+                                    Text(
+                                        "Enter Player-4 Name",
+                                        fontSize = 8.sp,
+                                        color = Color(94, 107, 147, 255),
+                                        fontWeight = FontWeight.ExtraBold
+                                    )
+                                }
+                            )
+                        }
+
+                    }
+                }
+            )
         }
     }
 }

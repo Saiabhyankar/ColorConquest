@@ -1,13 +1,20 @@
 package com.example.myapplication
 
 import android.content.Context
+import com.example.myapplication.GameLogic
+import kotlin.random.Random
+import android.database.Cursor
 import android.graphics.drawable.Icon
+import android.media.MediaPlayer
 import android.provider.Settings.Global.putInt
 import android.provider.Settings.Global.putString
 import android.service.autofill.Validators.and
 import android.view.Gravity.apply
 import android.widget.Toast
 import androidx.activity.compose.setContent
+import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.fadeOut
+import androidx.compose.animation.shrinkOut
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -49,7 +56,9 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -61,6 +70,8 @@ import androidx.compose.ui.draw.rotate
 import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.Color.Companion.White
+import androidx.compose.ui.input.pointer.PointerIcon
+import androidx.compose.ui.input.pointer.pointerHoverIcon
 import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
@@ -70,10 +81,17 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.core.graphics.rotationMatrix
+import kotlinx.coroutines.Delay
+import kotlinx.coroutines.InternalCoroutinesApi
+import kotlinx.coroutines.delay
 import java.util.ArrayList
+
 
 @Composable
 fun PreviewPage3(navigateToFirstScreen: () -> Unit) {
+
+    val context3 = LocalContext.current
+    val mediaPlayer =  MediaPlayer.create(context3, R.raw.wrong_move)
     var sizeR=85-(tile.value*tile.value)
     var sizeB=75-(tile.value*tile.value)
     var painter1 = painterResource(id = R.drawable.redcircle)
@@ -84,11 +102,14 @@ fun PreviewPage3(navigateToFirstScreen: () -> Unit) {
     var painter3= painterResource(id = R.drawable.appdev6)
     var painter4= painterResource(id = R.drawable.reset)
     var painter5= painterResource(id = R.drawable.exit)
-    var list3= mutableListOf<Int>(tile.value-1)
+    //var painter6= painterResource(id = R.drawable.mousepointer)
+
     var Tot=0
     var flag=false
     var context= LocalContext.current
     val context1 = LocalContext.current
+
+    var list3= mutableListOf<Int>(tile.value-1)
     for (i in 1..tile.value-1){
         list3.add(i)
     }
@@ -104,6 +125,8 @@ fun PreviewPage3(navigateToFirstScreen: () -> Unit) {
     for (i in (((tile.value-1)*(tile.value))+1)..(((tile.value-1)*(tile.value))+tile.value-2) ){
         list6.add(i)
     }
+
+    
     fun GridLogic(index: Int) {
         if ((GridVal[index] >3 && P1Cnt.value > 0)) {
             if (listOf(0, tile.value-1, tile.value*tile.value -1, tile.value*tile.value-tile.value).contains(index)) {
@@ -270,9 +293,81 @@ fun PreviewPage3(navigateToFirstScreen: () -> Unit) {
                 P2Score.value+=GridVal[i]
             }
         }
+    }
+    @Composable
+    fun Bot(index:Int){
+        LaunchedEffect(key1 = Unit) {
+            delay(1000)
+            PageColor.value = 0
+        }
+
+        if(index==0){
+            ch.value=tile.value+1
+        }
+        else if(index==tile.value-1){
+            ch.value=2*tile.value-2
+        }
+        else if(index==(tile.value-1)*(tile.value)){
+            ch.value=3*tile.value+1
+        }
+        else if(index==(tile.value)*(tile.value)-1){
+            ch.value=(tile.value-1)*(tile.value)-2
+        }
+        else if(list3.contains(index)){
+            ch.value=index+tile.value-1
+        }
+        else if(list4.contains(index)){
+            ch.value=index+tile.value-1
+        }
+        else if(list5.contains(index)){
+            ch.value=index-tile.value+1
+        }
+        else if(list6.contains(index)){
+            ch.value=index-tile.value+1
+        }
+        else{
+            ch.value=index-tile.value+1
+
+        }
+
+        Grid[ch.value] = 1
+        ValColor[ch.value] = 1
+        Grid2[ch.value] = 1
+
+        if (Grid3[ch.value] == -1) {
+            Grid3[ch.value] = Grid2[ch.value]
+        }
+        P2Cnt.value+=1
+        if (ValColor[ch.value] == 1) {
+            if (P1Cnt.value == 0) {
+                GridVal[ch.value] = 3
+
+            } else {
+                GridVal[ch.value] += 1
+
+            }
+        }
+        if (Grid[ch.value] == 1 && (P1Cnt.value >= 0 && GridVal[ch.value] != 0) && !(ch.value in list1)) {
+            list.add(index)
+        }
+
+        if (Grid3[ch.value] == 1 && Grid[ch.value] == 1) {
+            list2.add(ch.value)
+        }
+//        if (GridVal[ch.value] != 0) {
+//            Image(
+//                painter = painter2, contentDescription = "bluecircle",
+//                modifier = Modifier.size(sizeB.dp)
+//            )
+//            Text(
+//                GridVal[ch.value].toString(),
+//                fontSize = 24.sp,
+//                color = Color.White
+//            )
+//        }
+
 
     }
-
     if (PageColor.value == 1) {
         Surface(
             color = Color(47, 183, 241, 255),
@@ -445,59 +540,97 @@ fun PreviewPage3(navigateToFirstScreen: () -> Unit) {
             items(tile.value*tile.value) { index ->
                 Box(
                     contentAlignment = Alignment.Center
-                ){
+                ) {
 
                     Button(
                         shape = RoundedCornerShape(10),
-
+//                        enabled = if(hackerMode.value==1 && Turn.value==1)false else true ,
                         onClick = {
 
-                            if(Grid[index]==1 && (P1Cnt.value>=0 && GridVal[index]!=0 )&&!(index in list1)){
+                            if (Grid[index] == 1 && (P1Cnt.value >= 0 && GridVal[index] != 0) && !(index in list1)) {
                                 list.add(index)
                             }
-                            if (Grid3[index]==0 && Grid[index]==1){
+                            if (Grid3[index] == 0 && Grid[index] == 1) {
                                 list1.add(index)
-                            }
-                            else if(Grid3[index]==1 && Grid[index]==1 ){
+                            } else if (Grid3[index] == 1 && Grid[index] == 1) {
                                 list2.add(index)
                             }
-                            if ((index in list || P1Cnt.value==-1|| P2Cnt.value==-1)) {
-                                if (((Turn.value == 0 && index in list1)|| P1Cnt.value==-1) ||(P2Cnt.value==-1 && !(index in list1)||(Turn.value==1 && index in list2)) ) {
-                                    PageColor.value = if (PageColor.value == 0) 1 else 0
-                                    Grid[index] = 1
-                                    ValColor[index] = if (PageColor.value == 0) 1 else 0
-                                    Grid2[index] = if (ValColor[index] == 0) 0 else 1
-                                    Turn.value = if (Turn.value == 0) 1 else 0
-                                    if (Grid3[index] == -1) {
-                                        Grid3[index] = Grid2[index]
-                                    }
-                                    if (ValColor[index] == 0) {
-                                        P1Cnt.value += 1
-                                    } else {
-                                        P2Cnt.value += 1
-                                    }
-                                    if (ValColor[index] == 0) {
-
-                                        if (P1Cnt.value == 0) {
-                                            GridVal[index] = 3
-
-                                        } else {
-                                            GridVal[index] += 1
-
+                            if ((index in list || P1Cnt.value == -1 || P2Cnt.value == -1)) {
+                                if (((Turn.value == 0 && index in list1) || P1Cnt.value == -1) || (P2Cnt.value == -1 && !(index in list1) || (Turn.value == 1 && index in list2))) {
+                                    if (hackerMode.value == 0) {
+                                        PageColor.value = if (PageColor.value == 0) 1 else 0
+                                        Grid[index] = 1
+                                        ValColor[index] = if (PageColor.value == 0) 1 else 0
+                                        Grid2[index] = if (ValColor[index] == 0) 0 else 1
+                                        Turn.value = if (Turn.value == 0) 1 else 0
+                                        if (Grid3[index] == -1) {
+                                            Grid3[index] = Grid2[index]
                                         }
-                                    } else {
-                                        if (P2Cnt.value == 0) {
-                                            GridVal[index] = 3
-
+                                        if (ValColor[index] == 0) {
+                                            P1Cnt.value += 1
                                         } else {
-                                            GridVal[index] += 1
+                                            P2Cnt.value += 1
                                         }
+                                        if (ValColor[index] == 0) {
+
+                                            if (P1Cnt.value == 0) {
+                                                GridVal[index] = 3
+
+                                            } else {
+                                                GridVal[index] += 1
+
+                                            }
+                                        } else {
+                                            if (P2Cnt.value == 0) {
+                                                GridVal[index] = 3
+
+                                            } else {
+                                                GridVal[index] += 1
+                                            }
+                                        }
+                                    }
+                                    else if (hackerMode.value == 1) {
+                                        PageColor.value = if (PageColor.value == 0) 1 else 0
+                                        Grid[index] = 1
+                                        ValColor[index] = if (PageColor.value == 0) 1 else 0
+                                        Grid2[index] = if (ValColor[index] == 0) 0 else 1
+                                        Turn.value = if (Turn.value == 0) 1 else 0
+                                        if (Grid3[index] == -1) {
+                                            Grid3[index] = Grid2[index]
+                                        }
+                                        if (ValColor[index] == 0) {
+                                            P1Cnt.value += 1
+                                        } else {
+                                            P2Cnt.value += 1
+                                        }
+                                        if (ValColor[index] == 0) {
+                                                if (P1Cnt.value == 0) {
+                                                    GridVal[index] = 3
+
+                                                } else {
+                                                    GridVal[index] += 1
+
+                                                }
+                                            }
+                                        else {
+                                            if (P2Cnt.value == 0) {
+                                                GridVal[index] = 3
+
+                                            } else {
+                                                GridVal[index] += 1
+                                            }
+                                        }
+
                                     }
                                 }
                             }
-                            if(!(index in list)&&((P1Cnt.value>0)||(P2Cnt.value==0))){
-                                Toast.makeText(context,"Invalid Option",
-                                    Toast.LENGTH_LONG).show()
+
+                            if (!(index in list) && ((P1Cnt.value > 0) || (P2Cnt.value == 0))) {
+                                Toast.makeText(
+                                    context, "Invalid Option",
+                                    Toast.LENGTH_LONG
+                                ).show()
+                                mediaPlayer.start()
                             }
                         },
                         modifier = Modifier
@@ -505,38 +638,77 @@ fun PreviewPage3(navigateToFirstScreen: () -> Unit) {
                             .aspectRatio(1f)
                             .clip(RoundedCornerShape(16.dp))
                             .shadow(elevation = 200.dp),
-                        colors = ButtonDefaults.buttonColors(containerColor = Color(244, 228, 206, 255))
+                        colors = ButtonDefaults.buttonColors(
+                            containerColor = Color(
+                                244,
+                                228,
+                                206,
+                                255
+                            )
+                        )
 
                     ) {
                         GamePoint()
                         GridLogic(index)
                     }
-                    if(Grid[index]==1 && ValColor[index]==0 && Grid3[index]==0 ){
-                        if (GridVal[index]!=0){
-                            Image(painter = painter1, contentDescription = "redcircle",
-                                modifier = Modifier.size(sizeR.dp),
-                            )
-                            Text(
-                                GridVal[index].toString(),
-                                color=Color.White,
-                                fontSize = 24.sp)
-                        }
+                    if (hackerMode.value == 0){
+                        if (Grid[index] == 1 && ValColor[index] == 0 && Grid3[index] == 0) {
+                            if (GridVal[index] != 0) {
+//                                AnimatedVisibility(
+//                                    visible = true,
+//                                    exit = shrinkOut {  }
+//                                ){
 
-                    }
-                    else if(Grid[index]==1 && ValColor[index]==1 && Grid3[index]==1
-                    ) {
-                        if (GridVal[index] != 0) {
-                            Image(painter = painter2, contentDescription = "bluecircle",
-                                modifier = Modifier.size(sizeB.dp))
-                            Text(
-                                GridVal[index].toString(),
-                                fontSize = 24.sp,
-                                color = Color.White
-                            )
+                                    Image(
+                                        painter = painter1, contentDescription = "redcircle",
+                                        modifier = Modifier.size(sizeR.dp),
+                                    )
+                                    Text(
+                                        GridVal[index].toString(),
+                                        color = Color.White,
+                                        fontSize = 24.sp
+                                    )
+                                //}
+                            }
+
+                        } else if (Grid[index] == 1 && ValColor[index] == 1 && Grid3[index] == 1
+                        ) {
+                            if (GridVal[index] != 0) {
+                                Image(
+                                    painter = painter2, contentDescription = "bluecircle",
+                                    modifier = Modifier.size(sizeB.dp)
+                                )
+                                Text(
+                                    GridVal[index].toString(),
+                                    fontSize = 24.sp,
+                                    color = Color.White
+                                )
+                            }
                         }
-                    }
                 }
+                        else if(hackerMode.value==1) {
+//                        ff
+                        if (Grid[index] == 1 && ValColor[index] == 0 && Grid3[index] == 0 ) {
 
+                            if (GridVal[index] != 0) {
+                                Image(
+                                    painter = painter1, contentDescription = "redcircle",
+                                    modifier = Modifier.size(sizeR.dp),
+                                )
+                                Text(
+                                    GridVal[index].toString(),
+                                    color = Color.White,
+                                    fontSize = 24.sp
+                                )
+                            }
+
+                        }
+
+
+
+
+                        }
+                }
             }
         }
     }
@@ -609,8 +781,8 @@ fun PreviewPage3(navigateToFirstScreen: () -> Unit) {
               flag=false
         }
        if(flag){
-                writeToSharedPref(context1,"Name",name)
-                writeToSharedPref(context1,"Score",wScore.toString())
+                writeToSharedPref(context1,"Name",name,"MysharedPref")
+                writeToSharedPref(context1,"Score",wScore.toString(),"MysharedPref")
                 AlertDialog(onDismissRequest = {
 
                 }, confirmButton = { /*TODO*/ },
@@ -727,11 +899,8 @@ fun PreviewPage3(navigateToFirstScreen: () -> Unit) {
                 ValColor[i]=-1
             }
         }
-
-        }
-
-
     }
+}
 
 
 

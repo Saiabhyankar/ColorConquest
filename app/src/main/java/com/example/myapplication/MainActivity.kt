@@ -36,11 +36,17 @@ val Grid3= mutableStateListOf(-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1
 var ValColor= mutableStateListOf(-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1)
 var P1Score= mutableIntStateOf(0)
 var P2Score= mutableIntStateOf(0)
+var P3Score= mutableIntStateOf(0)
+var P4Score= mutableIntStateOf(0)
 var player1Name=mutableStateOf("")
 var player2Name=mutableStateOf("")
+var player3Name=mutableStateOf("")
+var player4Name=mutableStateOf("")
 var GridVal=mutableStateListOf(0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0)
 var P1Cnt= mutableIntStateOf(-1)
 var P2Cnt= mutableIntStateOf(-1)
+var P3Cnt= mutableIntStateOf(-1)
+var P4Cnt= mutableIntStateOf(-1)
 var Turn = mutableIntStateOf(0)
 var DialogBox1= mutableStateOf(false)
 var DialogBox2= mutableStateOf(false)
@@ -53,11 +59,15 @@ var P1Win= 0
 var P2Win= 0
 var isDarkTheme= mutableStateOf(false)
 var showDetail=mutableStateOf(false)
-var pageNav= mutableStateOf(0)
+var hackerMode= mutableStateOf(0)
 var TimerMode= mutableStateOf(false)
-fun writeToSharedPref(context: Context, key: String, value: String) {
+var ch =mutableIntStateOf(1)
+var Multi= mutableStateOf(0)
+var playerNum= mutableStateOf(2)
+var nameMulti= mutableStateOf(0)
+fun writeToSharedPref(context: Context, key: String, value: String,Filename:String) {
     // Obtain an instance of SharedPreferences
-    val sharedPref: SharedPreferences = context.getSharedPreferences("MySharedPref", Context.MODE_PRIVATE)
+    val sharedPref: SharedPreferences = context.getSharedPreferences(Filename, Context.MODE_PRIVATE)
     // Get an editor to edit the SharedPreferences
     val editor: SharedPreferences.Editor = sharedPref.edit()
     // Put the value into SharedPreferences
@@ -65,9 +75,9 @@ fun writeToSharedPref(context: Context, key: String, value: String) {
     // Apply the changes
     editor.apply()
 }
-fun readFromSharedPreferences(context: Context, key: String): String {
-    val sharedPreferences: SharedPreferences = context.getSharedPreferences("MySharedPref", Context.MODE_PRIVATE)
-    return sharedPreferences.getString(key, null).toString() }
+fun readFromSharedPreferences(context: Context, key: String,Filename: String): String {
+    val sharedPreferences: SharedPreferences = context.getSharedPreferences(Filename, Context.MODE_PRIVATE)
+    return sharedPreferences.getString(key,"").toString() }
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -101,10 +111,13 @@ class MainActivity : ComponentActivity() {
                         }
                         composable("thirdscreen") {
                             GameMode {
-                                if(!TimerMode.value){
+                                if(!TimerMode.value && hackerMode.value==1 ){
                                 navController.navigate("fourthscreen")}
-                                else{
+                                else if(TimerMode.value){
                                     navController.navigate("fifthscreen")
+                                }
+                                else if(hackerMode.value==2){
+                                    navController.navigate("sixthscreen")
                                 }
                             }
 
@@ -114,10 +127,16 @@ class MainActivity : ComponentActivity() {
                                 navController.navigate("firstscreen")
                             }
                         }
+                        composable("sixthscreen"){
+                            MultiPlayer{
+                                navController.navigate("firstscreen")
+                            }
+                        }
 
                     }
-                    Box(modifier = Modifier.fillMaxSize()
-                        .offset(-10.dp,30.dp),
+                    Box(modifier = Modifier
+                        .fillMaxSize()
+                        .offset(-10.dp, 30.dp),
                         contentAlignment = Alignment.TopEnd){
                         CustomToggleButton(selected = isDarkTheme,
                             onChangeValue = {

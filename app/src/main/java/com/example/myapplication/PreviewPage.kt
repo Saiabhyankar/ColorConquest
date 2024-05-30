@@ -1,6 +1,4 @@
 package com.example.myapplication
-
-
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
@@ -45,12 +43,9 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.myapplication.ui.theme.MyApplicationTheme
 import com.example.myapplication.ui.theme.fontFamily
-
-
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun PreviewPage(navigateToSecondPage:()->Unit){
-
     val gradient = Brush.verticalGradient(
         0.0f to Color(254,194,113,255),
         1.0f to Color(254,99,109,255),
@@ -62,7 +57,6 @@ fun PreviewPage(navigateToSecondPage:()->Unit){
     var showDialog by remember {
         mutableStateOf(false)
     }
-
     Column(
         modifier= Modifier.size(10.dp),
         horizontalAlignment = Alignment.CenterHorizontally
@@ -133,8 +127,6 @@ fun PreviewPage(navigateToSecondPage:()->Unit){
                         fontWeight = FontWeight.ExtraBold
                         )
                 }
-
-
                 if(showDialog){
                     AlertDialog(onDismissRequest = { showDialog=false}, confirmButton = { /*TODO*/ },
                         modifier = Modifier
@@ -163,10 +155,7 @@ fun PreviewPage(navigateToSecondPage:()->Unit){
                                  color=Color.White)
                         })
                 }
-
             }
         }
-
-        }
-
     }
+}

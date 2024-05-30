@@ -64,8 +64,8 @@ fun PreviewPage2(navigateToThirdPage:()->Unit) {
     var painter2 = painterResource(id = R.drawable.image1)
     var painter3 = painterResource(id = R.drawable.appdev4)
     var painter4 = painterResource(id = R.drawable.appdev5)
-    val name=readFromSharedPreferences(context,"Name")
-    val Score= readFromSharedPreferences(context1,"Score")
+    val name=readFromSharedPreferences(context,"Name","MysharedPref")
+    val Score= readFromSharedPreferences(context1,"Score","MysharedPref")
     Column(
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
@@ -200,7 +200,7 @@ fun PreviewPage2(navigateToThirdPage:()->Unit) {
             painter = painter2, contentDescription = "Image",
             modifier = Modifier
                 .size(height = 350.dp, width = 650.dp)
-                .offset(0.dp, 30.dp)
+                .offset(0.dp, 80.dp)
 
         )
         Column {
