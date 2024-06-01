@@ -65,6 +65,7 @@ var ch =mutableIntStateOf(1)
 var Multi= mutableStateOf(0)
 var playerNum= mutableStateOf(2)
 var nameMulti= mutableStateOf(0)
+var norMode= mutableStateOf(0)
 fun writeToSharedPref(context: Context, key: String, value: String,Filename:String) {
     // Obtain an instance of SharedPreferences
     val sharedPref: SharedPreferences = context.getSharedPreferences(Filename, Context.MODE_PRIVATE)
@@ -111,8 +112,11 @@ class MainActivity : ComponentActivity() {
                         }
                         composable("thirdscreen") {
                             GameMode {
-                                if(!TimerMode.value && hackerMode.value==1 ){
+                                if( !TimerMode.value && (hackerMode.value==1) ){
                                 navController.navigate("fourthscreen")}
+                                else if(!TimerMode.value && norMode.value==1){
+                                    navController.navigate("fourthscreen")
+                                }
                                 else if(TimerMode.value){
                                     navController.navigate("fifthscreen")
                                 }

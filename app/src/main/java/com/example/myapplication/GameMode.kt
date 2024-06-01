@@ -179,6 +179,7 @@ fun GameMode(navigateToGamePage:()->Unit){
                     Column{
                         Button(onClick = {
                             hackerMode.value=1
+                            TimerMode.value=false
                             navigateToGamePage()}){
                             Text("VS Computer")
                         }
@@ -196,9 +197,12 @@ fun GameMode(navigateToGamePage:()->Unit){
                     Column(){
                         Text("Choose Number Of Players")
                         Button(onClick = {
-                            playerNum.value=2
+                            nameMulti.value=0
                             Multi.value=0
-                            nameMulti.value=1
+                            norMode.value=1
+                            hackerMode.value=0
+                            TimerMode.value=false
+                            navigateToGamePage()
                             }){
                             Text("2")
                         }
@@ -206,13 +210,15 @@ fun GameMode(navigateToGamePage:()->Unit){
                             playerNum.value=3
                             Multi.value=0
                             nameMulti.value=1
+                            TimerMode.value=false
                             }){
                             Text("3")
                         }
                         Button(onClick = {
                             Multi.value=0
                             playerNum.value=4
-                            nameMulti.value=1}){
+                            nameMulti.value=1
+                            TimerMode.value=false}){
                             Text("4")
                         }
                     }

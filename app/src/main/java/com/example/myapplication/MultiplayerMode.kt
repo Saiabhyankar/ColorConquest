@@ -1,11 +1,14 @@
 package com.example.myapplication
 
+import android.graphics.pdf.PdfDocument.Page
+import android.media.MediaPlayer
 import android.widget.Toast
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.offset
@@ -16,6 +19,7 @@ import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.shape.CutCornerShape
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Card
@@ -23,21 +27,40 @@ import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableIntStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.rotate
 import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 @Composable
 fun MultiPlayer(navigateToMultiplayer:()->Unit){
+    var context= LocalContext.current
+    val context3 = LocalContext.current
+    val mediaPlayer =  MediaPlayer.create(context3, R.raw.wrong_move)
     var painter1 = painterResource(id = R.drawable.redcircle)
     var painter2= painterResource(id = R.drawable.bluecircle)
     var painter3= painterResource(id = R.drawable.greencolor)
+    var painter4= painterResource(id = R.drawable.yellowcircle)
+    var counter by remember {
+        mutableIntStateOf(0)
+    }
+    var counter1 by remember {
+        mutableIntStateOf(0)
+    }
+    var counter2 by remember {
+        mutableIntStateOf(0)
+    }
     var list= mutableListOf<Int>(25)
     var list1=  mutableListOf<Int>(25)
     var list2= mutableListOf<Int>(25)
@@ -76,12 +99,14 @@ fun MultiPlayer(navigateToMultiplayer:()->Unit){
             modifier = Modifier.fillMaxWidth()
         ) {}
     }
-//    else if (PageColor.value == 0) {
-//        Surface(
-//            color = Color(255, 94, 86, 255),
-//            modifier = Modifier.fillMaxWidth()
-//        ) {}
-//    }
+    if(playerNum.value==4){
+        if(PageColor.value==3){
+            Surface(
+                color = Color(222,239,43,255),
+                modifier = Modifier.fillMaxWidth()
+            ) {}
+        }
+    }
     fun GridLogic(index: Int) {
         if ((GridVal[index] >3 && P1Cnt.value > 0)) {
             if (listOf(0, tile.value-1, tile.value*tile.value -1, tile.value*tile.value-tile.value).contains(index)) {
@@ -247,6 +272,9 @@ fun MultiPlayer(navigateToMultiplayer:()->Unit){
             else if(ValColor[i]==1){
                 P3Score.value+= GridVal[i]
             }
+            else if(ValColor[i]==3){
+                P4Score.value+= GridVal[i]
+            }
         }
     }
     Column(){
@@ -379,72 +407,478 @@ fun MultiPlayer(navigateToMultiplayer:()->Unit){
                             else if (Grid3[index] == 1 && Grid[index] == 1) {
                                 list7.add(index)
                             }
-//                            else if (Grid3[index] == 3 && Grid[index] == 1) {
-//                                list8.add(index)
-//                            }
-                            if ((index in list || P1Cnt.value == -1 || P2Cnt.value == -1 || P3Cnt.value==-1)) {
+                            else if (Grid3[index] == 3 && Grid[index] == 1) {
+                                list8.add(index)
+                            }
+                            if ((index in list || P1Cnt.value == -1 || P2Cnt.value == -1 || P3Cnt.value==-1 || (P4Cnt.value==-1 && playerNum.value==4) )) {
                                 if (((Turn.value == 0 && index in list1) || P1Cnt.value == -1)
                                     ||
                                     (P2Cnt.value == -1 && !(index in list1)
                                             ||
                                             (Turn.value == 1 && index in list2))
                                     ||
-                                    (P3Cnt.value==-1 ||(Turn.value==2 && index in list7))) {
-                                    Grid[index] = 1
-                                    PageColor.value =
-                                            if (PageColor.value == 0 )
+                                    ((P3Cnt.value==-1 && !(index in list)) ||(Turn.value==2 && index in list7))
+                                    ||
+                                    (P4Cnt.value==-1 && !(index in list) || (Turn.value==3 && index in list8))) {
+                                    if ((P1Score.value != 0 && P2Score.value != 0 && P3Score.value != 0 && (P4Score.value!=0 || playerNum.value==3)) || P1Cnt.value <= 0) {
+                                        Grid[index] = 1
+                                         if(playerNum.value==3) {
+                                            PageColor.value =
+                                                if (PageColor.value == 0)
+                                                    1
+                                                else if (PageColor.value == 1)
+                                                    2
+                                                else
+                                                    0
+                                            ValColor[index] = if (PageColor.value == 0)
+                                                1
+                                            else if (PageColor.value == 1)
+                                                2
+                                            else
+                                                0
+                                            Grid2[index] = if (ValColor[index] == 0)
+                                                0
+                                            else if (ValColor[index] == 1)
+                                                1
+                                            else
+                                                2
+                                            Turn.value = if (Turn.value == 0)
+                                                1
+                                            else if (Turn.value == 1)
+                                                2
+                                            else
+                                                0
+                                            if (Grid3[index] == -1) {
+                                                Grid3[index] = Grid2[index]
+                                            }
+                                            if (ValColor[index] == 2) {
+                                                P1Cnt.value += 1
+                                            } else if (ValColor[index] == 0) {
+                                                P2Cnt.value += 1
+                                            } else {
+                                                P3Cnt.value += 1
+                                            }
+                                            if (P1Cnt.value == 0) {
+                                                GridVal[index] = 3
+                                            } else {
+                                                GridVal[index] += 1
+                                            }
+
+                                        }
+                                        else if(playerNum.value==4){
+                                             PageColor.value =
+                                                 if (PageColor.value == 0)
+                                                     1
+                                                 else if (PageColor.value == 1)
+                                                     2
+                                                 else if (PageColor.value==2)
+                                                      3
+                                                else
+                                                    0
+                                             ValColor[index] = if (PageColor.value == 0)
+                                                 3
+                                             else if (PageColor.value == 1)
+                                                 2
+                                             else if(PageColor.value==2)
+                                                 0
+                                             else
+                                                 1
+                                             Grid2[index] = if (ValColor[index] == 0)
+                                                 0
+                                             else if (ValColor[index] == 1)
+                                                 1
+                                             else if(ValColor[index]==3)
+                                                 3
+                                             else
+                                                 2
+                                             Turn.value = if (Turn.value == 0)
+                                                 1
+                                             else if (Turn.value == 1)
+                                                 2
+                                             else if(Turn.value==2)
+                                                 3
+                                             else
+                                                 0
+                                             if (Grid3[index] == -1) {
+                                                 Grid3[index] = Grid2[index]
+                                             }
+                                             if (ValColor[index] == 2) {
+                                                 P1Cnt.value += 1
+                                             } else if (ValColor[index] == 0) {
+                                                 P2Cnt.value += 1
+                                             }
+                                             else if(ValColor[index]==3){
+                                                 P4Cnt.value+=1
+                                             }
+                                             else {
+                                                 P3Cnt.value += 1
+                                             }
+                                             if (P1Cnt.value == 0) {
+                                                 GridVal[index] = 3
+                                             } else {
+                                                 GridVal[index] += 1
+                                             }
+
+                                        }
+                                    }
+                                    if (playerNum.value == 3){
+                                        if (P1Score.value == 0 && P1Cnt.value > 0) {
+                                         Grid[index] = 1
+                                            PageColor.value = if (PageColor.value == 2)
+                                                1
+                                            else
+                                             2
+                                        ValColor[index] =
+                                            if (PageColor.value == 2)
+                                                0
+                                            else
+                                                1
+                                        Grid2[index] =
+                                            if (ValColor[index] == 1)
+                                                1
+                                            else
+                                                0
+                                        if (Grid3[index] == -1) {
+                                            Grid3[index] = Grid2[index]
+                                        }
+                                        Turn.value = if (Turn.value == 2)
+                                            1
+                                        else
+                                            2
+                                        GridVal[index] += 1
+
+                                    } else if (P2Score.value == 0 && P1Cnt.value > 0) {
+                                        Grid[index] = 1
+                                        PageColor.value = if (PageColor.value == 2)
+                                            0
+                                        else
+                                            2
+                                        ValColor[index] =
+                                            if (PageColor.value == 2)
+                                                2
+                                            else
+                                                1
+                                        Grid2[index] =
+                                            if (ValColor[index] == 2)
+                                                2
+                                            else
+                                                1
+                                        if (Grid3[index] == -1) {
+                                            Grid3[index] = Grid2[index]
+                                        }
+                                        Turn.value = if (Turn.value == 2)
+                                            0
+                                        else
+                                            2
+                                        GridVal[index] += 1
+
+                                    } else if (P3Score.value == 0 && P1Cnt.value > 0) {
+                                        Grid[index] = 1
+                                        PageColor.value = if (PageColor.value == 0)
+                                            1
+                                        else
+                                            0
+                                        ValColor[index] =
+                                            if (PageColor.value == 0)
+                                                0
+                                            else
+                                                2
+                                        Grid2[index] =
+                                            if (ValColor[index] == 2)
+                                                2
+                                            else
+                                                0
+                                        if (Grid3[index] == -1) {
+                                            Grid3[index] = Grid2[index]
+                                        }
+                                        Turn.value = if (Turn.value == 1)
+                                            0
+                                        else
+                                            1
+                                        GridVal[index] += 1
+
+                                    }
+
+                                   }
+                                    else if(playerNum.value==4){
+                                        if(P1Score.value==0 && P2Score.value==0 && P1Cnt.value>0){
+                                            PageColor.value=if(PageColor.value==2)
+                                                3
+                                            else 2
+                                            ValColor[index]=if(PageColor.value==2)
+                                                3
+                                            else
+                                                1
+                                            Turn.value=if(Turn.value==2)
+                                                3
+                                            else
+                                                2
+                                            Grid2[index] =
+                                                if (ValColor[index] == 3)
+                                                    3
+                                                else
+                                                    1
+
+                                            if (Grid3[index] == -1) {
+                                                Grid3[index] = Grid2[index]
+                                            }
+                                            GridVal[index] += 1
+                                        }
+                                       else if(P1Score.value==0 && P3Score.value==0 && P1Cnt.value>0){
+                                            PageColor.value=
+                                                if(PageColor.value==1)
+                                                    3
+                                                else
+                                                    1
+                                            ValColor[index]=if(PageColor.value==1)
+                                                3
+                                            else
+                                                0
+                                            Turn.value=if(Turn.value==1)
+                                                3
+                                            else
+                                                1
+                                            Grid2[index] =
+                                                if (ValColor[index] == 0)
+                                                    0
+                                                else
+                                                    3
+
+                                            if (Grid3[index] == -1) {
+                                                Grid3[index] = Grid2[index]
+                                            }
+                                            GridVal[index] += 1
+                                        }
+                                        else if(P2Score.value==0 && P3Score.value==0 && P1Cnt.value>0){
+                                            PageColor.value=if(PageColor.value==0)
+                                                3
+                                            else 0
+                                            ValColor[index]=if(PageColor.value==3)
+                                                2
+                                            else
+                                                3
+                                            Turn.value=if(Turn.value==0)
+                                                3
+                                            else
+                                                0
+                                            Grid2[index] =
+                                                if (ValColor[index] == 3)
+                                                    3
+                                                else
+                                                    2
+
+                                            if (Grid3[index] == -1) {
+                                                Grid3[index] = Grid2[index]
+                                            }
+                                            GridVal[index] += 1
+                                        }
+                                        else if(P1Score.value==0 && P4Score.value==0 && P1Cnt.value>0){
+                                            PageColor.value=if(PageColor.value==2)
+                                                1
+                                            else 2
+                                            ValColor[index]=if(PageColor.value==2)
+                                                0
+                                            else
+                                                1
+                                            Turn.value=if(Turn.value==1)
+                                                2
+                                            else
+                                                1
+                                            Grid2[index] =
+                                                if (ValColor[index] == 0)
+                                                    0
+                                                else
+                                                    1
+
+                                            if (Grid3[index] == -1) {
+                                                Grid3[index] = Grid2[index]
+                                            }
+                                            GridVal[index] += 1
+                                        }
+                                        else if(P3Score.value==0 && P4Score.value==0 && P1Cnt.value>0){
+                                            PageColor.value=if(PageColor.value==0)
+                                                1
+                                            else 0
+                                            ValColor[index]=if(PageColor.value==0)
+                                                0
+                                            else
+                                                2
+                                            Turn.value=if(Turn.value==1)
+                                                0
+                                            else
+                                                1
+                                            Grid2[index] =
+                                                if (ValColor[index] == 0)
+                                                    0
+                                                else
+                                                    2
+
+                                            if (Grid3[index] == -1) {
+                                                Grid3[index] = Grid2[index]
+                                            }
+                                            GridVal[index] += 1
+                                        }
+                                        else if(P2Score.value==0 && P4Score.value==0 && P1Cnt.value>0){
+                                            PageColor.value=if(PageColor.value==0)
+                                                2
+                                            else 0
+                                            ValColor[index]=if(PageColor.value==0)
+                                                1
+                                            else
+                                                2
+                                            Turn.value=if(Turn.value==0)
+                                                2
+                                            else
+                                                0
+                                            Grid2[index] =
+                                                if (ValColor[index] == 2)
+                                                    2
+                                                else
+                                                    1
+
+                                            if (Grid3[index] == -1) {
+                                                Grid3[index] = Grid2[index]
+                                            }
+                                            GridVal[index] += 1
+                                        }
+                                        else if(P1Score.value==0 && P1Cnt.value>0){
+                                            PageColor.value=if(PageColor.value==1)
+                                                2
+                                            else if(PageColor.value==2)
+                                                3
+                                            else
+                                                1
+                                            ValColor[index]=if(PageColor.value==1)
+                                                3
+                                            else if(PageColor.value==2)
+                                                0
+                                            else
+                                                1
+                                            Grid2[index] =
+                                                if (ValColor[index] == 3)
+                                                    3
+                                                else if(ValColor[index]==1)
+                                                    1
+                                                else
+                                                    0
+                                            if (Grid3[index] == -1) {
+                                                Grid3[index] = Grid2[index]
+                                            }
+                                            Turn.value=if(Turn.value==1)
+                                                2
+                                            else if(Turn.value==2)
+                                                3
+                                            else
+                                                1
+                                            GridVal[index] += 1
+                                        }
+                                         else if(P2Score.value==0 && P1Cnt.value>0){
+                                             PageColor.value=if(PageColor.value==0)
+                                                 2
+                                             else if(PageColor.value==2)
+                                                 3
+                                             else
+                                                 0
+                                             ValColor[index]=if(PageColor.value==0)
+                                                 3
+                                             else if(PageColor.value==2)
+                                                 2
+                                             else
+                                                 1
+                                             Grid2[index] =
+                                                 if (ValColor[index] == 3)
+                                                     3
+                                                 else if(ValColor[index]==1)
+                                                     1
+                                                 else
+                                                     2
+                                             if (Grid3[index] == -1) {
+                                                 Grid3[index] = Grid2[index]
+                                             }
+                                             Turn.value=if(Turn.value==0)
+                                                 2
+                                             else if(Turn.value==2)
+                                                 3
+                                             else
+                                                 0
+                                             GridVal[index] += 1
+                                         }
+                                        else if(P3Score.value==0 && P1Cnt.value>0){
+                                            PageColor.value=if(PageColor.value==0)
+                                                1
+                                            else if(PageColor.value==1)
+                                                3
+                                            else
+                                                0
+                                            ValColor[index]=if(PageColor.value==0)
+                                                3
+                                            else if(PageColor.value==1)
+                                                2
+                                            else
+                                                0
+                                            Grid2[index] =
+                                                if (ValColor[index] == 3)
+                                                    3
+                                                else if(ValColor[index]==2)
+                                                    2
+                                                else
+                                                    0
+                                            if (Grid3[index] == -1) {
+                                                Grid3[index] = Grid2[index]
+                                            }
+                                            Turn.value=if(Turn.value==0)
+                                                1
+                                            else if(Turn.value==1)
+                                                3
+                                            else
+                                                0
+                                            GridVal[index] += 1
+                                        }
+                                        else if(P4Score.value==0 && P1Cnt.value>0){
+                                            PageColor.value=
+                                                if(PageColor.value==0)
                                                 1
                                             else if(PageColor.value==1)
                                                 2
                                             else
                                                 0
-                                        ValColor[index] = if (PageColor.value == 0)
-                                            1
-                                        else if(PageColor.value==1)
-                                            2
-                                        else
-                                            0
-                                        Grid2[index] =  if (ValColor[index]== 0)
-                                            0
-                                        else if(ValColor[index]==1)
-                                            1
-                                        else
-                                            2
-                                        Turn.value =  if (Turn.value == 0)
-                                            1
-                                        else if(Turn.value==1)
-                                            2
-                                        else
-                                            0
-                                        if (Grid3[index] == -1) {
-                                            Grid3[index] = Grid2[index]
-                                        }
-                                        if (ValColor[index] == 2) {
-                                            P1Cnt.value += 1
-                                        }
-                                        else if(ValColor[index]==0){
-                                            P2Cnt.value += 1
-                                        }
-                                        else{
-                                            P3Cnt.value+=1
-                                        }
-                                        if (P1Cnt.value == 0) {
-                                                GridVal[index] = 3
+                                            ValColor[index]=
+                                                if(PageColor.value==0)
+                                                    1
+                                                else if(PageColor.value==1)
+                                                    2
+                                                else
+                                                    0
+                                            Grid2[index] =
+                                                if (ValColor[index] == 2)
+                                                    2
+                                                else if(ValColor[index]==1)
+                                                    1
+                                                else
+                                                    0
+                                            if (Grid3[index] == -1) {
+                                                Grid3[index] = Grid2[index]
                                             }
-                                        else {
-                                                GridVal[index] += 1
-                                            }
+                                            Turn.value=if(Turn.value==0)
+                                                1
+                                            else if(Turn.value==1)
+                                                2
+                                            else
+                                                0
+                                            GridVal[index] += 1
+                                        }
+                                    }
 
                                 }
                             }
 
-//                            if (!(index in list) && ((P1Cnt.value > 0) || (P2Cnt.value == 0))) {
-//                                Toast.makeText(
-//                                    context, "Invalid Option",
-//                                    Toast.LENGTH_LONG
-//                                ).show()
-//                                mediaPlayer.start()
-//                            }
+                            if (!(index in list) && ((P1Cnt.value >=1) )) {
+                                Toast.makeText(
+                                    context, "Invalid Option",
+                                    Toast.LENGTH_LONG
+                                ).show()
+                                mediaPlayer.start()
+                            }
                         },
                         modifier = Modifier
                             .padding(5.dp)
@@ -463,34 +897,89 @@ fun MultiPlayer(navigateToMultiplayer:()->Unit){
                     ) {
                         GamePoint()
                         GridLogic(index)
-                        if((P1Score.value==0 || P2Score.value==0 || P3Score.value==0)&& P1Cnt.value>0) {
-                            if(P1Score.value==0){
+                        if (playerNum.value == 3){
+                            if (P1Score.value == 0 && P1Cnt.value > 0 && counter == 0) {
                                 PageColor.value =
-                                    if (PageColor.value == 0 )
+                                    if (PageColor.value == 0)
                                         1
-                                    else if(PageColor.value==1)
+                                    else
                                         2
-                                else
-                                    1
 
-                                ValColor[index] =
-                                    if (PageColor.value == 2)
+                                Turn.value = if (Turn.value == 0)
                                     1
                                 else
                                     2
-//
-                                Grid2[index] =
-                                    if(ValColor[index]==1)
-                                        1
-                                    else
-                                        2
-                                Turn.value =
-                                    if(Turn.value==1)
+                                counter += 1
+                            } else if (P2Score.value == 0 && P1Cnt.value > 0 && counter == 0) {
+                                PageColor.value =
+                                    if (PageColor.value == 1)
                                         2
                                     else
+                                        0
+                                Turn.value = if (Turn.value == 1)
+                                    2
+                                else
+                                    0
+                                counter += 1
+                            } else if (P3Score.value == 0 && P1Cnt.value > 0 && counter == 0) {
+                                PageColor.value =
+                                    if (PageColor.value == 2)
+                                        0
+                                    else
                                         1
+                                Turn.value = if (Turn.value == 2)
+                                    0
+                                else
+                                    1
+                                counter += 1
+                            }
+                    }
+                        else if(playerNum.value==4){
+
+                            if(P1Score.value==0 && P1Cnt.value>0 ){
+                                PageColor.value=if(PageColor.value==0)
+                                    1
+                                else
+                                    PageColor.value
+                                Turn.value=if(Turn.value==0)
+                                    1
+                                else
+                                    Turn.value
+
+                            }
+                            if(P2Score.value==0 && P1Cnt.value>0 ){
+                                PageColor.value=if(PageColor.value==1)
+                                    2
+                                else
+                                    PageColor.value
+                                Turn.value=if(Turn.value==1)
+                                    2
+                                else
+                                    Turn.value
+
+                            }
+                            if(P3Score.value==0 && P1Cnt.value>0){
+                                PageColor.value=if(PageColor.value==2)
+                                    3
+                                else
+                                    PageColor.value
+                                Turn.value=if(Turn.value==2)
+                                    3
+                                else
+                                    Turn.value
+                            }
+                            if(P4Score.value==0 && P1Cnt.value>0){
+                                PageColor.value=if(PageColor.value==3)
+                                    0
+                                else
+                                    PageColor.value
+                                Turn.value=if(Turn.value==3)
+                                    0
+                                else
+                                    Turn.value
                             }
                         }
+
                     }
                         if (Grid[index] == 1 && ValColor[index] == 2 && Grid3[index] == 2) {
                             if (GridVal[index] != 0) {
@@ -505,7 +994,8 @@ fun MultiPlayer(navigateToMultiplayer:()->Unit){
                                 )
                             }
 
-                        } else if (Grid[index] == 1 && ValColor[index] == 0 && Grid3[index] == 0
+                        }
+                        else if (Grid[index] == 1 && ValColor[index] == 0 && Grid3[index] == 0
                         ) {
                             if (GridVal[index] != 0) {
                                 Image(
@@ -533,23 +1023,143 @@ fun MultiPlayer(navigateToMultiplayer:()->Unit){
                                 )
                             }
                         }
-//                        else if (Grid[index] == 1 && ValColor[index] == 1 && Grid3[index] == 1
-//                        ) {
-//                            if (GridVal[index] != 0) {
-//                                Image(
-//                                    painter = painter2, contentDescription = "bluecircle",
-//                                    modifier = Modifier.size(55 .dp)
-//                                )
-//                                Text(
-//                                    GridVal[index].toString(),
-//                                    fontSize = 24.sp,
-//                                    color = Color.White
-//                                )
-//                            }
-//                        }
+
+                        if(playerNum.value==4){
+                           if (Grid[index] == 1 && ValColor[index] == 3 && Grid3[index] == 3
+                            ) {
+                                if (GridVal[index] != 0) {
+                                    Image(
+                                        painter = painter4, contentDescription = "yellowcircle",
+                                        modifier = Modifier.size(55 .dp)
+                                    )
+                                    Text(
+                                        GridVal[index].toString(),
+                                        fontSize = 24.sp,
+                                        color = Color.White
+                                    )
+                                }
+                            }
+                        }
 
                 }
             }
+        }
+        if((P1Score.value==0 || P2Score.value==0 || P3Score.value==0 || (P4Score.value==0 && playerNum.value==4))&&(P1Cnt.value>0)){
+            if(P1Score.value!=0){
+                name= player1Name.value
+            }
+            else if(P2Score.value==0){
+                name= player2Name.value
+            }
+            else if(P3Score.value!=0){
+                name= player3Name.value
+            }
+            else{
+                name= player4Name.value
+            }
+            AlertDialog(onDismissRequest = {
+
+            }, confirmButton = { /*TODO*/ },
+                containerColor =  Color(60,64,117,255),
+                modifier = Modifier.size(height=350.dp,width=250.dp),
+                iconContentColor =Color(193,232,250,255),
+                text={
+                    Column (
+                    ){
+                        Card (
+                            shape = RoundedCornerShape(20.dp),
+                            colors = CardDefaults.cardColors(containerColor = Color(255,255,255,255)),
+                            modifier=Modifier
+                                .size(width = 220.dp, height = 50.dp),
+
+                            ){
+                            Text(name.toUpperCase(),
+                                color = Color.Black,
+                                modifier=Modifier
+                                    .offset(15.dp,5.dp),
+                                fontWeight = FontWeight.ExtraBold,
+                                fontSize = 20.sp,
+                                textAlign = TextAlign.Center
+                            )
+                        }
+                        Image(painter=painter3,
+                            contentDescription = "i",
+                            modifier = Modifier
+                                .size(50.dp)
+                                .offset(75.dp, 40.dp)
+
+                        )
+                        Text("WINS !!",
+                            fontSize = 24.sp,
+                            fontWeight = FontWeight.ExtraBold,
+                            modifier = Modifier
+                                .offset(60.dp,60.dp))
+                        Column {
+
+                            Button(onClick = {
+                                P1Cnt.value=-1
+                                P2Cnt.value=-1
+                                P3Cnt.value=-1
+                                P4Cnt.value=-1
+                                PageColor.value=0
+                                var list= mutableListOf<Int>(tile.value*tile.value)
+                                var list1= mutableListOf<Int>(tile.value*tile.value)
+                                var list2= mutableListOf<Int>(tile.value*tile.value)
+                                var list7= mutableListOf<Int>(tile.value*tile.value)
+                                var list8= mutableListOf<Int>(tile.value*tile.value)
+                                Turn.value=0
+
+                                for (i in 0..tile.value*tile.value-1){
+                                    Grid[i]=0
+                                    GridVal[i]=0
+                                    Grid2[i]=-1
+                                    Grid3[i]=-1
+                                    ValColor[i]=-1
+                                }},
+                                modifier = Modifier
+                                    .offset(0.dp, 80.dp)
+                                    .size(width = 220.dp, height = 50.dp)){
+                                Text("Play Again",
+                                    color=Color.White,
+                                    fontSize = 24.sp)
+                            }
+                            Spacer(modifier =Modifier
+                                .padding(5 .dp))
+                            Button(onClick = { navigateToMultiplayer()
+                                P1Cnt.value=-1
+                                P2Cnt.value=-1
+                                P3Cnt.value=-1
+                                P4Cnt.value=-1
+                                PageColor.value=0
+                                var list= mutableListOf<Int>(tile.value*tile.value)
+                                var list1= mutableListOf<Int>(tile.value*tile.value)
+                                var list2= mutableListOf<Int>(tile.value*tile.value)
+                                var list7= mutableListOf<Int>(tile.value*tile.value)
+                                var list8= mutableListOf<Int>(tile.value*tile.value)
+                                Turn.value=0
+
+                                for (i in 0..tile.value*tile.value-1){
+                                    Grid[i]=0
+                                    GridVal[i]=0
+                                    Grid2[i]=-1
+                                    Grid3[i]=-1
+                                    ValColor[i]=-1
+                                }
+                            },
+                                modifier = Modifier
+                                    .offset(0.dp, 80.dp)
+                                    .size(width = 220.dp, height = 50.dp),
+                                colors = ButtonDefaults.buttonColors(containerColor = Color(254,95,86,255))){
+                                Text("Home",
+                                    fontSize = 24.sp,
+                                    color = Color.White)
+                            }
+                        }
+
+                    }
+                }
+            )
+
         }
     }
     Column(
@@ -573,12 +1183,11 @@ fun MultiPlayer(navigateToMultiplayer:()->Unit){
 
 
                 ) {
-                    Text(P2Score.value .toString(),
+                    Text(P4Score.value .toString(),
                         color= Color(226, 223, 45),
                         modifier = Modifier
                             .padding(16.dp)
-                            .offset(120.dp, 0.dp)
-                            .rotate(180f),
+                            .offset(120.dp, 0.dp),
                         textAlign = TextAlign.Right,
                         fontSize = 24.sp,
 
@@ -596,7 +1205,6 @@ fun MultiPlayer(navigateToMultiplayer:()->Unit){
                         color = Color(226, 223, 45),
                         modifier = Modifier
                             .padding(16.dp)
-                            .rotate(180f)
                         ,
                         fontSize = 24.sp,
                         textAlign = TextAlign.Center
@@ -627,8 +1235,7 @@ fun MultiPlayer(navigateToMultiplayer:()->Unit){
                     color = Color(255, 94, 86, 255),
                     modifier = Modifier
                         .padding(16.dp)
-                        .offset(120.dp, 0.dp)
-                        .rotate(180f),
+                        .offset(120.dp, 0.dp),
                     textAlign = TextAlign.Right,
                     fontSize = 24.sp,
 
@@ -646,8 +1253,7 @@ fun MultiPlayer(navigateToMultiplayer:()->Unit){
                     player1Name.value.toUpperCase(),
                     color = Color(255, 94, 86, 255),
                     modifier = Modifier
-                        .padding(16.dp)
-                        .rotate(180f),
+                        .padding(16.dp),
                     fontSize = 24.sp,
                     textAlign = TextAlign.Center
                 )
