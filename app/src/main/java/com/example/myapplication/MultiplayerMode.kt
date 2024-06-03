@@ -5,15 +5,18 @@ import android.media.MediaPlayer
 import android.widget.Toast
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.wrapContentWidth
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
@@ -52,13 +55,10 @@ fun MultiPlayer(navigateToMultiplayer:()->Unit){
     var painter2= painterResource(id = R.drawable.bluecircle)
     var painter3= painterResource(id = R.drawable.greencolor)
     var painter4= painterResource(id = R.drawable.yellowcircle)
+    var painter5= painterResource(id = R.drawable.winnericon)
+    var painter6=painterResource(id = R.drawable.reset)
+    var painter7=painterResource(id = R.drawable.exit)
     var counter by remember {
-        mutableIntStateOf(0)
-    }
-    var counter1 by remember {
-        mutableIntStateOf(0)
-    }
-    var counter2 by remember {
         mutableIntStateOf(0)
     }
     var list= mutableListOf<Int>(25)
@@ -105,6 +105,141 @@ fun MultiPlayer(navigateToMultiplayer:()->Unit){
                 color = Color(222,239,43,255),
                 modifier = Modifier.fillMaxWidth()
             ) {}
+        }
+    }
+    Column {
+        Button(
+            onClick = { DialogBox1.value = true },
+            modifier = Modifier
+                .offset(300.dp)
+                .padding(6.dp)
+                .height(50.dp)
+                .width(50.dp),
+            colors = ButtonDefaults.buttonColors(
+                containerColor = if (isDarkTheme.value) Color(
+                    255,
+                    254,
+                    252,
+                    255
+                ) else Color(9, 17, 3, 255)
+            )
+        ) {
+            Text(
+                "X", textAlign = TextAlign.Center,
+                color = Color(161, 184, 205, 255)
+            )
+        }
+        if (DialogBox1.value) {
+            AlertDialog(onDismissRequest = { DialogBox1.value = false },
+                confirmButton = { /*TODO*/ },
+                containerColor = Color.Transparent,
+                text = {
+                    Box(
+                        modifier = Modifier
+                            .size(height = 300.dp, width = 300.dp)
+                            .offset(20.dp, 0.dp)
+                    ) {
+                        Button(
+                            onClick = {
+                                P1Cnt.value = -1
+                                P2Cnt.value = -1
+                                P3Cnt.value=-1
+                                P4Cnt.value=-1
+                                PageColor.value = 0
+                                var list = mutableListOf<Int>(tile.value * tile.value)
+                                var list1 = mutableListOf<Int>(tile.value * tile.value)
+                                var list2 = mutableListOf<Int>(tile.value * tile.value)
+                                var list7 = mutableListOf<Int>(tile.value * tile.value)
+                                var list8 = mutableListOf<Int>(tile.value * tile.value)
+                                Turn.value = 0
+
+                                for (i in 0..((tile.value) * (tile.value) - 1)) {
+                                    Grid[i] = 0
+                                    GridVal[i] = 0
+                                    Grid2[i] = -1
+                                    Grid3[i] = -1
+                                    ValColor[i] = -1
+                                }
+                                DialogBox1.value = false
+                            },
+                            colors = ButtonDefaults.buttonColors(containerColor = Color.Transparent),
+                            modifier = Modifier.offset(110.dp, -(30.dp))
+                        ) {
+
+                        }
+                        Image(
+                            painter = painter6, contentDescription = "reset",
+                            modifier = Modifier
+                                .size(60.dp)
+                                .offset(110.dp, -(30.dp))
+                        )
+                        Button(
+                            onClick = {
+                                DialogBox2.value = true
+
+                            },
+                            colors = ButtonDefaults.buttonColors(containerColor = Color.Transparent),
+                            modifier = Modifier.offset(200.dp, -30.dp)
+                        ) {
+
+                        }
+                        Image(
+                            painter = painter7, contentDescription = "exit",
+                            modifier = Modifier
+                                .size(60.dp)
+                                .offset(200.dp, -30.dp)
+                        )
+                    }
+                }
+            )
+        }
+        if (DialogBox2.value) {
+            DialogBox1.value = false
+            AlertDialog(onDismissRequest = { /*TODO*/ }, confirmButton = { /*TODO*/ }, text = {
+                Text("Do you really want to exit ?")
+                Row() {
+                    Button(
+                        onClick = {
+                            navigateToMultiplayer()
+                            DialogBox2.value = false
+                            player1Name.value = ""
+                            player2Name.value = ""
+                            P1Cnt.value = -1
+                            P2Cnt.value = -1
+                            PageColor.value = 0
+                            player3Name.value = ""
+                            player4Name.value = ""
+                            P3Cnt.value = -1
+                            P4Cnt.value = -1
+                            var list = mutableListOf<Int>(tile.value * tile.value)
+                            var list1 = mutableListOf<Int>(tile.value * tile.value)
+                            var list2 = mutableListOf<Int>(tile.value * tile.value)
+                            var list7 = mutableListOf<Int>(tile.value * tile.value)
+                            var list8 = mutableListOf<Int>(tile.value * tile.value)
+                            Turn.value = 0
+                            for (i in 0..((tile.value) * (tile.value) - 1)) {
+                                Grid[i] = 0
+                                GridVal[i] = 0
+                                Grid2[i] = -1
+                                Grid3[i] = -1
+                                ValColor[i] = -1
+                            }
+                        },
+                        modifier = Modifier
+                            .offset(0.dp, 40.dp)
+                    ) {
+                        Text("Yes")
+                    }
+                    Spacer(modifier = Modifier.padding(4.dp))
+                    Button(
+                        onClick = { DialogBox2.value = false },
+                        modifier = Modifier
+                            .offset(0.dp, 40.dp)
+                    ) {
+                        Text("No")
+                    }
+                }
+            })
         }
     }
     fun GridLogic(index: Int) {
@@ -409,6 +544,14 @@ fun MultiPlayer(navigateToMultiplayer:()->Unit){
                             }
                             else if (Grid3[index] == 3 && Grid[index] == 1) {
                                 list8.add(index)
+                            }
+                            if (((P4Cnt.value>=0&& playerNum.value==4) ||(P3Cnt.value>=0 && playerNum.value==3)) &&((index !in list) || (Turn.value==0 && index !in list1) || (Turn.value==1 && index !in list2)
+                                        || (Turn.value==2 && index !in list7) || (Turn.value==3 && index !in list8))) {
+                                Toast.makeText(
+                                    context, "Invalid Option",
+                                    Toast.LENGTH_LONG
+                                ).show()
+                                mediaPlayer.start()
                             }
                             if ((index in list || P1Cnt.value == -1 || P2Cnt.value == -1 || P3Cnt.value==-1 || (P4Cnt.value==-1 && playerNum.value==4) )) {
                                 if (((Turn.value == 0 && index in list1) || P1Cnt.value == -1)
@@ -872,13 +1015,7 @@ fun MultiPlayer(navigateToMultiplayer:()->Unit){
                                 }
                             }
 
-                            if (!(index in list) && ((P1Cnt.value >=1) )) {
-                                Toast.makeText(
-                                    context, "Invalid Option",
-                                    Toast.LENGTH_LONG
-                                ).show()
-                                mediaPlayer.start()
-                            }
+
                         },
                         modifier = Modifier
                             .padding(5.dp)
@@ -1044,11 +1181,15 @@ fun MultiPlayer(navigateToMultiplayer:()->Unit){
                 }
             }
         }
-        if((P1Score.value==0 || P2Score.value==0 || P3Score.value==0 || (P4Score.value==0 && playerNum.value==4))&&(P1Cnt.value>0)){
-            if(P1Score.value!=0){
+        if(((P1Score.value==0 && P2Score.value==0 && P3Score.value==0 && (P4Score.value!=0 || playerNum.value==3))||
+            (P1Score.value==0 && P2Score.value==0 && P3Score.value!=0 && (P4Score.value==0 || playerNum.value==3))||
+            (P1Score.value==0 && P2Score.value!=0 && P3Score.value==0 && (P4Score.value==0 || playerNum.value==3))||
+            (P1Score.value!=0 && P2Score.value==0 && P3Score.value==0 && (P4Score.value==0 || playerNum.value==3)))
+            &&(P1Cnt.value>0)){
+            if(P1Score.value!=0 ){
                 name= player1Name.value
             }
-            else if(P2Score.value==0){
+            else if(P2Score.value!=0){
                 name= player2Name.value
             }
             else if(P3Score.value!=0){
@@ -1065,24 +1206,23 @@ fun MultiPlayer(navigateToMultiplayer:()->Unit){
                 iconContentColor =Color(193,232,250,255),
                 text={
                     Column (
-                    ){
-                        Card (
-                            shape = RoundedCornerShape(20.dp),
-                            colors = CardDefaults.cardColors(containerColor = Color(255,255,255,255)),
-                            modifier=Modifier
-                                .size(width = 220.dp, height = 50.dp),
+                    ){  Box(contentAlignment = Alignment.Center,
+                        modifier=Modifier
+                            .clip(shape = RoundedCornerShape(25.dp))
+                            .size(width=240.dp,height=60.dp)
+                            .background(color = Color(255,255,255,255))
+                            .offset(0.dp,-10.dp)){
 
-                            ){
-                            Text(name.toUpperCase(),
-                                color = Color.Black,
-                                modifier=Modifier
-                                    .offset(15.dp,5.dp),
-                                fontWeight = FontWeight.ExtraBold,
-                                fontSize = 20.sp,
-                                textAlign = TextAlign.Center
-                            )
-                        }
-                        Image(painter=painter3,
+                        Text(name.toUpperCase(),
+                            color = Color.Black,
+//                                    modifier=Modifier
+//                                        .offset(15.dp,5.dp),
+                            fontWeight = FontWeight.ExtraBold,
+                            fontSize = 20.sp
+                        )
+
+                    }
+                        Image(painter=painter5,
                             contentDescription = "i",
                             modifier = Modifier
                                 .size(50.dp)
@@ -1126,6 +1266,8 @@ fun MultiPlayer(navigateToMultiplayer:()->Unit){
                             Spacer(modifier =Modifier
                                 .padding(5 .dp))
                             Button(onClick = { navigateToMultiplayer()
+                                player2Name.value=""
+                                player1Name.value=""
                                 P1Cnt.value=-1
                                 P2Cnt.value=-1
                                 P3Cnt.value=-1
@@ -1241,6 +1383,7 @@ fun MultiPlayer(navigateToMultiplayer:()->Unit){
 
                     )
             }
+
             Card(
                 shape = CutCornerShape(45.dp, 5.dp, 5.dp, 45.dp),
                 colors = CardDefaults.cardColors(containerColor = Color(46, 50, 58, 255)),

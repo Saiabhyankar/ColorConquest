@@ -52,6 +52,9 @@ fun PreviewPage(navigateToSecondPage:()->Unit){
         startY = 0.0f,
         endY = 1500.0f
     )
+
+        Box(modifier = Modifier.background(gradient))
+
     Box(modifier = Modifier.background(gradient))
     val painter= painterResource(id = R.drawable.image1)
     var showDialog by remember {

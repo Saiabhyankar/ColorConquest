@@ -41,7 +41,9 @@ fun GameMode(navigateToGamePage:()->Unit){
         startY = 0.0f,
         endY = 1500.0f
     )
+
     Box(modifier = Modifier.background(gradient))
+
     Column(verticalArrangement = Arrangement.Top,
         horizontalAlignment = Alignment.CenterHorizontally){
         Box(
@@ -60,11 +62,12 @@ fun GameMode(navigateToGamePage:()->Unit){
 
 
 
-        Button(onClick = {navigateToGamePage()
-                         tile.value=5
-                         matchNumber.value=1
+        Button(onClick = {
+            tile.value=5
+            matchNumber.value=1
             hackerMode.value=0
             TimerMode.value=false
+            navigateToGamePage()
                          },
 
 
@@ -78,7 +81,7 @@ fun GameMode(navigateToGamePage:()->Unit){
             Text("Hacker Mode")
         }
         Button(onClick = {
-        hackerMode.value=1
+        hackerMode.value=3
           tile. value=5}){
             Text("Hacker ++ Mode")
         }
@@ -172,7 +175,7 @@ fun GameMode(navigateToGamePage:()->Unit){
 
                 })
         }
-        if(hackerMode.value==1){
+        if(hackerMode.value==3){
             AlertDialog(onDismissRequest = { hackerMode.value=0}, confirmButton = { /*TODO*/ },
                 modifier =Modifier.size(height=300.dp,width=300.dp),
                 text={
@@ -202,6 +205,7 @@ fun GameMode(navigateToGamePage:()->Unit){
                             norMode.value=1
                             hackerMode.value=0
                             TimerMode.value=false
+                            playerNum.value=2
                             navigateToGamePage()
                             }){
                             Text("2")
@@ -211,6 +215,8 @@ fun GameMode(navigateToGamePage:()->Unit){
                             Multi.value=0
                             nameMulti.value=1
                             TimerMode.value=false
+                            hackerMode.value=2
+                            norMode.value=0
                             }){
                             Text("3")
                         }
@@ -218,6 +224,8 @@ fun GameMode(navigateToGamePage:()->Unit){
                             Multi.value=0
                             playerNum.value=4
                             nameMulti.value=1
+                            hackerMode.value=2
+                            norMode.value=0
                             TimerMode.value=false}){
                             Text("4")
                         }
@@ -230,6 +238,8 @@ fun GameMode(navigateToGamePage:()->Unit){
                 modifier = Modifier.size(500.dp),
                 confirmButton = {
                     Button(onClick = { nameMulti.value = 0
+                        hackerMode.value=2
+                        norMode.value=0
                     navigateToGamePage()}) {
                         Text("OK")
                     }

@@ -59,13 +59,17 @@ fun PreviewPage2(navigateToThirdPage:()->Unit) {
         startY = 0.0f,
         endY = 1500.0f
     )
-    Box(modifier = Modifier.background(gradient))
+        Box(modifier = Modifier.background(gradient))
+
     var painter1 = painterResource(id = R.drawable.appdev2)
     var painter2 = painterResource(id = R.drawable.image1)
     var painter3 = painterResource(id = R.drawable.appdev4)
     var painter4 = painterResource(id = R.drawable.appdev5)
     val name=readFromSharedPreferences(context,"Name","MysharedPref")
     val Score= readFromSharedPreferences(context1,"Score","MysharedPref")
+    val nameT=readFromSharedPreferences(context,"name","TimerMode")
+    val ScoreT= readFromSharedPreferences(context1,"score","TimerMode")
+
     Column(
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
@@ -222,7 +226,7 @@ fun PreviewPage2(navigateToThirdPage:()->Unit) {
 
             Button(onClick = {showDetail.value=true},
                 modifier = Modifier
-                    .offset(130.dp,0.dp)
+                    .offset(130.dp, 0.dp)
                     .size(width = 150.dp, height = 60.dp)
                     .shadow(25.dp, RoundedCornerShape(5.dp))) {
                 Text("Winner Detail")
@@ -231,6 +235,12 @@ fun PreviewPage2(navigateToThirdPage:()->Unit) {
                 AlertDialog(onDismissRequest = { showDetail.value=false}, confirmButton = { /*TODO*/ },
                     text={
                         Column(){
+                            Button(onClick = { showDetail.value=false
+                            showDetailT.value=true}) {
+                                Text(
+                                    "Timer Mode Score"
+                                )
+                            }
                             Row {
                                 Text("Player Name",
                                     fontSize = 16.sp,
@@ -251,7 +261,37 @@ fun PreviewPage2(navigateToThirdPage:()->Unit) {
                                     textAlign = TextAlign.End)
                             }
                         }
-                    })}
+                    }
+                )
+            }
+            if(showDetailT.value){
+                AlertDialog(onDismissRequest = { showDetailT.value=false}, confirmButton = { /*TODO*/ },
+                    text={
+                        Column(){
+
+                            Row {
+                                Text("Player Name",
+                                    fontSize = 16.sp,
+                                    textAlign = TextAlign.Right)
+                                Spacer(modifier = Modifier
+                                    .padding(16.dp))
+                                Text("Player Score",
+                                    fontSize = 16.sp,
+                                    textAlign = TextAlign.Center)
+                            }
+                            Row {
+                                Text(nameT,fontSize = 16.sp,
+                                    textAlign = TextAlign.Center)
+                                Spacer(modifier = Modifier
+                                    .padding(60 .dp))
+                                Text(ScoreT,
+                                    fontSize = 16.sp,
+                                    textAlign = TextAlign.End)
+                            }
+                        }
+                    }
+                )
+            }
         }
     }
 }

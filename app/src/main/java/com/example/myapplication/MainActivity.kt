@@ -28,6 +28,14 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.example.myapplication.ui.theme.MyApplicationTheme
 import android.content.SharedPreferences
+import android.content.pm.ActivityInfo
+import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.core.tween
+import androidx.compose.animation.fadeIn
+import androidx.compose.animation.fadeOut
+import androidx.compose.animation.slideInHorizontally
+import androidx.compose.animation.slideOutHorizontally
+import androidx.navigation.compose.currentBackStackEntryAsState
 
 var PageColor= mutableIntStateOf(0)
 var Grid= mutableStateListOf(0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0)
@@ -55,10 +63,12 @@ var wScore=0
 var tile= mutableIntStateOf(5)
 var gameMode= mutableIntStateOf(0)
 var matchNumber= mutableIntStateOf(1)
-var P1Win= 0
-var P2Win= 0
+var P1Win= mutableStateOf(0)
+var P2Win= mutableStateOf(0)
 var isDarkTheme= mutableStateOf(false)
+var isDarkTheme1= mutableStateOf(false)
 var showDetail=mutableStateOf(false)
+var showDetailT=mutableStateOf(false)
 var hackerMode= mutableStateOf(0)
 var TimerMode= mutableStateOf(false)
 var ch =mutableIntStateOf(1)
@@ -67,13 +77,13 @@ var playerNum= mutableStateOf(2)
 var nameMulti= mutableStateOf(0)
 var norMode= mutableStateOf(0)
 fun writeToSharedPref(context: Context, key: String, value: String,Filename:String) {
-    // Obtain an instance of SharedPreferences
+
     val sharedPref: SharedPreferences = context.getSharedPreferences(Filename, Context.MODE_PRIVATE)
-    // Get an editor to edit the SharedPreferences
+
     val editor: SharedPreferences.Editor = sharedPref.edit()
-    // Put the value into SharedPreferences
+
     editor.putString(key, value)
-    // Apply the changes
+
     editor.apply()
 }
 fun readFromSharedPreferences(context: Context, key: String,Filename: String): String {
@@ -83,6 +93,7 @@ fun readFromSharedPreferences(context: Context, key: String,Filename: String): S
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_PORTRAIT
         setContent {
             var isDarkTheme by remember { mutableStateOf(false) }
 
@@ -94,26 +105,18 @@ class MainActivity : ComponentActivity() {
                 ) {
 
                     val navController = rememberNavController()
+                    val navBackStackEntry by navController.currentBackStackEntryAsState()
+                    val currentScreen = navBackStackEntry?.destination?.route
                     NavHost(navController = navController, startDestination = "firstScreen") {
                         composable("firstscreen") {
                             PreviewPage {
-                                navController.navigate("secondscreen")
+                                navController.navigate("thirdscreen")
                             }
                         }
                         composable("secondscreen") {
                             PreviewPage2 {
-                                navController.navigate(("thirdscreen"))
-                            }
-                        }
-                        composable("fourthscreen") {
-                            PreviewPage3 {
-                                navController.navigate("firstscreen")
-                            }
-                        }
-                        composable("thirdscreen") {
-                            GameMode {
-                                if( !TimerMode.value && (hackerMode.value==1) ){
-                                navController.navigate("fourthscreen")}
+                                if( !TimerMode.value && (hackerMode.value==1 || hackerMode.value==0) ){
+                                    navController.navigate("fourthscreen")}
                                 else if(!TimerMode.value && norMode.value==1){
                                     navController.navigate("fourthscreen")
                                 }
@@ -123,6 +126,16 @@ class MainActivity : ComponentActivity() {
                                 else if(hackerMode.value==2){
                                     navController.navigate("sixthscreen")
                                 }
+                            }
+                        }
+                        composable("fourthscreen") {
+                            PreviewPage3 {
+                                navController.navigate("firstscreen")
+                            }
+                        }
+                        composable("thirdscreen") {
+                            GameMode {
+                                navController.navigate("secondscreen")
                             }
 
                         }
@@ -146,6 +159,26 @@ class MainActivity : ComponentActivity() {
                             onChangeValue = {
                                 isDarkTheme=it
                             })}
+//                    AnimatedVisibility(
+//                        visible = currentScreen == "firstscreen",
+//                        enter = fadeIn(animationSpec = tween(700)) + slideInHorizontally(initialOffsetX = { -1000 }, animationSpec = tween(700)),
+//                        exit = fadeOut(animationSpec = tween(700)) + slideOutHorizontally(targetOffsetX = { 1000 }, animationSpec = tween(700))
+//                    ) {
+//                        if (currentScreen == "firstscreen") PreviewPage(navigateToSecondPage= {
+//                            navController.navigate("thirdscreen")
+//                        })
+//                    }
+//
+//                    AnimatedVisibility(
+//                        visible = currentScreen == "thirdscreen",
+//                        enter = fadeIn(animationSpec = tween(700)) + slideInHorizontally(initialOffsetX = { -1000 }, animationSpec = tween(700)),
+//                        exit = fadeOut(animationSpec = tween(700)) + slideOutHorizontally(targetOffsetX = { 1000 }, animationSpec = tween(700))
+//                    ) {
+//                        if (currentScreen == "thirdscreen") GameMode(navigateToGamePage =  {
+//                            navController.navigate("secondscreen")
+//                        })
+//                    }
+
                 }
 
             }
